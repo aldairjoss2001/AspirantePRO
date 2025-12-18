@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AspirantePro | Tu ingreso a la ESFM asegurado</title>
+    
+    <!-- Framework de Estilos: Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tipografía: Poppins y Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Iconos: Google Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <!-- Animaciones: AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --accent: #fbbf24;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Degradado de texto personalizado */
+        .text-gradient {
+            background: linear-gradient(to right, #1e3a8a, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Animación de flotado para elementos visuales */
+        .float-animation {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Efecto de brillo en botones */
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: rotate(45deg);
+            transition: 0.6s;
+            opacity: 0;
+        }
+
+        .shine-effect:hover::after {
+            left: 120%;
+            opacity: 1;
+        }
+
+        /* Glassmorphism para tarjetas */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Estilo para el Navbar al hacer scroll */
+        .nav-scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            padding: 0.5rem 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <!-- BARRA DE NAVEGACIÓN -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 px-4 md:px-10 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="bg-blue-700 p-2 rounded-xl text-white shadow-lg">
+                <span class="material-symbols-outlined text-3xl">menu_book</span>
+            </div>
+            <span class="text-2xl font-bold text-blue-900 tracking-tighter">Aspirante<span class="text-blue-500">Pro</span></span>
+        </div>
+        
+        <div class="hidden lg:flex items-center gap-8 font-medium text-blue-900/80">
+            <a href="#inicio" class="hover:text-blue-600 transition-colors">Inicio</a>
+            <a href="#recursos" class="hover:text-blue-600 transition-colors">Material de Estudio</a>
+            <a href="#beneficios" class="hover:text-blue-700 transition-colors">Beneficios</a>
+            <a href="#comprar" class="bg-blue-700 text-white px-8 py-3 rounded-2xl shadow-xl hover:bg-blue-800 transition-all shine-effect">Acceso Total 15 Bs.</a>
+        </div>
+
+        <button class="lg:hidden text-blue-900">
+            <span class="material-symbols-outlined text-4xl">menu</span>
+        </button>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="inicio" class="relative pt-32 pb-20 overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-blue-50 -z-10 rounded-l-[100px] hidden lg:block"></div>
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 items-center gap-12">
+            <div data-aos="fade-right">
+                <div class="inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-bold mb-6">
+                    <span class="material-symbols-outlined text-sm">bolt</span> ACTUALIZADO GESTIÓN 2024
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-blue-950 leading-tight mb-6">
+                    Asegura tu cupo en la <span class="text-gradient">ESFM</span> hoy mismo.
+                </h1>
+                <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                    La plataforma más completa para postulantes a maestros. Obtén acceso a toda la bibliografía oficial, exámenes pasados resueltos y simulacros interactivos por un precio simbólico.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#comprar" class="px-10 py-5 bg-blue-700 text-white rounded-2xl font-bold text-lg shadow-2xl hover:scale-105 transition-transform flex items-center justify-center gap-2 shine-effect">
+                        <span class="material-symbols-outlined">rocket_launch</span> Comenzar ahora
+                    </a>
+                    <a href="#recursos" class="px-10 py-5 bg-white border-2 border-blue-100 text-blue-700 rounded-2xl font-bold text-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                         Ver contenido
+                    </a>
+                </div>
+            </div>
+            
+            <div class="relative" data-aos="zoom-in">
+                <div class="float-animation">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop" alt="Estudiantes estudiando" class="rounded-[2.5rem] shadow-2xl grayscale-[20%] hover:grayscale-0 transition-all duration-500">
+                </div>
+                <!-- Card flotante decorativa -->
+                <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-3xl shadow-2xl max-w-[240px] border border-blue-50 hidden md:block" data-aos="fade-up" data-aos-delay="400">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <span class="material-symbols-outlined text-green-600">verified</span>
+                        </div>
+                        <span class="font-bold text-sm">Contenido Oficial</span>
+                    </div>
+                    <p class="text-xs text-gray-500">Basado en los lineamientos del Ministerio de Educación.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION (Material) -->
+    <section id="recursos" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl font-bold text-blue-950 mb-4">Todo lo que incluye tu suscripción</h2>
+            <div class="w-24 h-1.5 bg-blue-600 mx-auto rounded-full"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Libros -->
+            <div class="bg-gray-50 p-8 rounded-[2rem] hover:bg-blue-50 transition-all border border-transparent hover:border-blue-200" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-blue-600 text-3xl">auto_stories</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Libros de Gestión</h3>
+                <p class="text-sm text-gray-600">Bibliografía actualizada 2024 y archivos históricos de gestiones anteriores para un estudio profundo.</p>
+            </div>
+
+            <!-- Examenes -->
+            <div class="bg-gray-50 p-8 rounded-[2rem] hover:bg-blue-50 transition-all border border-transparent hover:border-blue-200" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-green-600 text-3xl">task</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Exámenes Pasados</h3>
+                <p class="text-sm text-gray-600">Batería de exámenes reales de los últimos 10 años, todos resueltos y explicados pedagógicamente.</p>
+            </div>
+
+            <!-- Simulacros -->
+            <div class="bg-gray-50 p-8 rounded-[2rem] hover:bg-blue-50 transition-all border border-transparent hover:border-blue-200" data-aos="fade-up" data-aos-delay="300">
+                <div class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-purple-600 text-3xl">quiz</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Simulacros Pro</h3>
+                <p class="text-sm text-gray-600">Realiza pruebas con cronómetro real y obtén tu puntaje al instante. Identifica tus puntos débiles.</p>
+            </div>
+
+            <!-- Soporte -->
+            <div class="bg-gray-50 p-8 rounded-[2rem] hover:bg-blue-50 transition-all border border-transparent hover:border-blue-200" data-aos="fade-up" data-aos-delay="400">
+                <div class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-yellow-600 text-3xl">tips_and_updates</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Tips de Ingreso</h3>
+                <p class="text-sm text-gray-600">Estrategias de resolución rápida de problemas y consejos para el día del examen oficial.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section id="comprar" class="py-24 bg-blue-950 text-white overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="bg-white/5 backdrop-blur-xl border border-white/10 p-12 rounded-[3rem] grid lg:grid-cols-2 gap-12 items-center relative overflow-hidden">
+                <!-- Decoración -->
+                <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-500 rounded-full blur-[100px] opacity-20"></div>
+                
+                <div data-aos="fade-right">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">La mejor preparación por el precio más bajo.</h2>
+                    <p class="text-blue-100/80 text-lg mb-8">
+                        No gastes cientos de bolivianos en cursos presenciales. Todo lo que necesitas está aquí, accesible desde tu celular o computadora por un pago único de:
+                    </p>
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="bg-white/10 px-6 py-2 rounded-2xl border border-white/20">
+                            <span class="text-4xl font-black text-yellow-400">15 Bs.</span>
+                        </div>
+                        <span class="text-blue-200 italic">Pago único - Acceso de por vida</span>
+                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-400">check_circle</span> Sin cobros mensuales</li>
+                        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-400">check_circle</span> Descargas permitidas</li>
+                        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-400">check_circle</span> Soporte vía WhatsApp</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white text-gray-900 p-8 rounded-[2rem] shadow-2xl" data-aos="flip-left">
+                    <h3 class="text-2xl font-bold text-center mb-8">Comienza tu preparación</h3>
+                    <div class="space-y-6">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-bold text-gray-500 uppercase tracking-wider">Método de Pago</label>
+                            <div class="flex gap-4">
+                                <!-- QR Bancario -->
+                                <div class="flex-1 border-2 border-blue-600 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer bg-blue-50/50">
+                                    <span class="material-symbols-outlined text-blue-600 text-3xl">qr_code_2</span>
+                                    <span class="text-xs font-bold text-center">QR Bancario</span>
+                                </div>
+                                <!-- Tarjeta -->
+                                <div class="flex-1 border-2 border-gray-100 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer hover:border-blue-300 transition-colors">
+                                    <span class="material-symbols-outlined text-gray-700 text-3xl">credit_card</span>
+                                    <span class="text-xs font-bold text-center leading-tight">Tarjeta Débito / Crédito</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full py-5 bg-blue-700 text-white rounded-2xl font-bold text-xl shadow-xl hover:bg-blue-800 transition-all shine-effect">
+                            GENERAR PAGO AHORA
+                        </button>
+                        <p class="text-center text-xs text-gray-400">Recibirás acceso inmediato tras validar tu comprobante.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-50 pt-20 pb-10 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
+                <div class="flex items-center gap-2">
+                    <div class="bg-blue-700 p-2 rounded-xl text-white">
+                        <span class="material-symbols-outlined">menu_book</span>
+                    </div>
+                    <span class="text-2xl font-bold text-blue-900 tracking-tighter">Aspirante<span class="text-blue-500">Pro</span></span>
+                </div>
+                <div class="flex gap-8 text-sm font-bold text-gray-500 uppercase tracking-widest">
+                    <a href="#" class="hover:text-blue-700 transition-colors">Facebook</a>
+                    <a href="#" class="hover:text-blue-700 transition-colors">TikTok</a>
+                    <a href="#" class="hover:text-blue-700 transition-colors">WhatsApp</a>
+                </div>
+            </div>
+            <div class="text-center text-gray-400 text-sm">
+                &copy; 2024 AspirantePro Bolivia. Diseñado para los futuros formadores de la patria.
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Esperar a que el DOM esté cargado y la librería AOS esté disponible
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    once: true,
+                    easing: 'ease-out-quad'
+                });
+            }
+        });
+
+        // Lógica de Navbar al Scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('nav-scrolled');
+                navbar.classList.remove('py-6');
+                navbar.classList.add('py-4');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+                navbar.classList.add('py-6');
+                navbar.classList.remove('py-4');
+            }
+        });
+    </script>
+</body>
+</html>
