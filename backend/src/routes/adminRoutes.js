@@ -7,6 +7,7 @@ const {
   createContent,
   updateContent,
   deleteContent,
+  getQuiz,
   createQuiz,
   updateQuiz,
   deleteQuiz,
@@ -32,6 +33,7 @@ router.put('/content/:id', updateContent);
 router.delete('/content/:id', deleteContent);
 
 // Rutas de gestión de quizzes
+router.get('/quizzes/:id', getQuiz);
 router.post('/quizzes', createQuiz);
 router.put('/quizzes/:id', updateQuiz);
 router.delete('/quizzes/:id', deleteQuiz);

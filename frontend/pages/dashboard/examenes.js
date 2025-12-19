@@ -66,8 +66,10 @@ export default function Examenes() {
   return (
     <DashboardLayout>
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-          ✅ Banco de Exámenes
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2 flex items-center gap-3">
+          <span className="material-symbols-outlined text-4xl text-green-700">task</span>
+          Banco de Exámenes
+        </h1>
         </h1>
         <p className="text-gray-600">Exámenes pasados con respuestas explicadas</p>
       </div>

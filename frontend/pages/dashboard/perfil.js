@@ -113,8 +113,9 @@ export default function Perfil() {
     <DashboardLayout>
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-            👤 Mi Perfil
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2 flex items-center gap-3">
+            <span className="material-symbols-outlined text-4xl text-blue-700">account_circle</span>
+            Mi Perfil
           </h1>
           <p className="text-gray-600">Administra tu cuenta y preferencias</p>
         </div>

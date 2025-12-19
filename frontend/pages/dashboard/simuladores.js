@@ -124,8 +124,9 @@ export default function Simuladores() {
       <DashboardLayout>
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-              🎯 Simuladores Pro
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-3">
+              <span className="material-symbols-outlined text-4xl text-purple-700">quiz</span>
+              Simuladores Pro
             </h1>
             <p className="text-gray-600">Practica con exámenes cronometrados</p>
           </div>

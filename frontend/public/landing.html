@@ -100,16 +100,28 @@
             <span class="text-2xl font-bold text-blue-900 tracking-tighter">Aspirante<span class="text-blue-500">Pro</span></span>
         </div>
         
-        <div class="hidden lg:flex items-center gap-8 font-medium text-blue-900/80">
+        <div class="hidden lg:flex items-center gap-6 font-medium text-blue-900/80">
             <a href="#inicio" class="hover:text-blue-600 transition-colors">Inicio</a>
             <a href="#recursos" class="hover:text-blue-600 transition-colors">Material de Estudio</a>
             <a href="#beneficios" class="hover:text-blue-700 transition-colors">Beneficios</a>
-            <a href="#comprar" class="bg-blue-700 text-white px-8 py-3 rounded-2xl shadow-xl hover:bg-blue-800 transition-all shine-effect">Acceso Total 15 Bs.</a>
+            <a href="/auth/login" class="flex items-center gap-2 px-6 py-3 bg-white border-2 border-blue-700 text-blue-700 rounded-2xl font-bold hover:bg-blue-50 transition-all">
+                <span class="material-symbols-outlined">login</span>
+                Iniciar Sesión
+            </a>
+            <a href="#comprar" class="flex items-center gap-2 bg-blue-700 text-white px-8 py-3 rounded-2xl shadow-xl hover:bg-blue-800 transition-all shine-effect">
+                <span class="material-symbols-outlined">shopping_cart</span>
+                Acceso Total 15 Bs.
+            </a>
         </div>
 
-        <button class="lg:hidden text-blue-900">
-            <span class="material-symbols-outlined text-4xl">menu</span>
-        </button>
+        <div class="flex lg:hidden items-center gap-3">
+            <a href="/auth/login" class="p-2 bg-blue-700 text-white rounded-xl">
+                <span class="material-symbols-outlined text-2xl">login</span>
+            </a>
+            <button class="text-blue-900">
+                <span class="material-symbols-outlined text-4xl">menu</span>
+            </button>
+        </div>
     </nav>
 
     <!-- HERO SECTION -->

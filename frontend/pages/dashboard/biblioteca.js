@@ -66,8 +66,10 @@ export default function Biblioteca() {
   return (
     <DashboardLayout>
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-          📚 Biblioteca Digital
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2 flex items-center gap-3">
+          <span className="material-symbols-outlined text-4xl text-blue-700">auto_stories</span>
+          Biblioteca Digital
+        </h1>
         </h1>
         <p className="text-gray-600">Accede a toda la bibliografía oficial</p>
       </div>

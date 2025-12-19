@@ -147,6 +147,29 @@ exports.deleteContent = async (req, res, next) => {
 
 // ============ GESTIÓN DE QUIZZES ============
 
+// @desc    Obtener un quiz específico
+// @route   GET /api/admin/quizzes/:id
+// @access  Private/Admin
+exports.getQuiz = async (req, res, next) => {
+  try {
+    const quiz = await Quiz.findById(req.params.id);
+
+    if (!quiz) {
+      return res.status(404).json({
+        success: false,
+        message: 'Quiz no encontrado'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: quiz
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Crear pregunta de quiz
 // @route   POST /api/admin/quizzes
 // @access  Private/Admin
