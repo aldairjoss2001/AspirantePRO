@@ -65,17 +65,27 @@ exports.getContent = async (req, res, next) => {
   }
 };
 
-// @desc    Obtener quizzes para simulacro
+// @desc    Obtener quizzes para simulacro (filtrado por materias de acceso)
 // @route   GET /api/quizzes
 // @access  Private (requiere acceso activo)
 exports.getQuizzes = async (req, res, next) => {
   try {
-    const { categoria, limite } = req.query;
+    const { categoria, materia, limite } = req.query;
     
     let query = { activo: true };
     
     if (categoria) {
       query.categoria = categoria;
+    }
+    
+    if (materia) {
+      query.materia = materia;
+    }
+    
+    // Filter by user's subject access
+    const user = await User.findById(req.user.id);
+    if (user && user.materias_acceso && user.materias_acceso.length > 0) {
+      query.materia = { $in: user.materias_acceso };
     }
 
     let quizzesQuery = Quiz.find(query).select('-respuesta_correcta -explicacion');

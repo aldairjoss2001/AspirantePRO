@@ -2,6 +2,8 @@ const User = require('../models/User');
 const Content = require('../models/Content');
 const Quiz = require('../models/Quiz');
 const Notification = require('../models/Notification');
+const Settings = require('../models/Settings');
+const { MATERIAS_ESFM } = require('../constants/materias');
 
 // ============ GESTIÓN DE USUARIOS ============
 
@@ -396,3 +398,71 @@ exports.deleteNotification = async (req, res, next) => {
     next(error);
   }
 };
+
+// ============ CONFIGURACIÓN / SETTINGS ============
+
+// @desc    Obtener configuración general
+// @route   GET /api/admin/settings
+// @access  Private/Admin
+exports.getSettings = async (req, res, next) => {
+  try {
+    let settings = await Settings.findOne();
+    
+    // Si no existe configuración, crear una por defecto
+    if (!settings) {
+      settings = await Settings.create({
+        qr_code_url: null,
+        qr_code_text: 'Escanea este código QR para realizar el pago de 15 Bs.',
+        whatsapp_number: '+59160572616'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: settings
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Actualizar configuración general
+// @route   PUT /api/admin/settings
+// @access  Private/Admin
+exports.updateSettings = async (req, res, next) => {
+  try {
+    let settings = await Settings.findOne();
+    
+    if (!settings) {
+      settings = await Settings.create(req.body);
+    } else {
+      settings = await Settings.findOneAndUpdate(
+        {},
+        req.body,
+        { new: true, runValidators: true }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      data: settings
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Obtener lista de materias ESFM
+// @route   GET /api/admin/materias
+// @access  Private/Admin
+exports.getMaterias = async (req, res, next) => {
+  try {
+    res.status(200).json({
+      success: true,
+      data: MATERIAS_ESFM
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

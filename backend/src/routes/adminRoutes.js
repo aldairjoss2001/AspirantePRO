@@ -15,7 +15,10 @@ const {
   getDashboardStats,
   createNotification,
   updateNotification,
-  deleteNotification
+  deleteNotification,
+  getSettings,
+  updateSettings,
+  getMaterias
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/auth');
 const upload = require('../config/upload');
@@ -48,5 +51,13 @@ router.get('/stats', getDashboardStats);
 router.post('/notifications', createNotification);
 router.put('/notifications/:id', updateNotification);
 router.delete('/notifications/:id', deleteNotification);
+
+// Rutas de configuración
+router.get('/settings', getSettings);
+router.put('/settings', updateSettings);
+router.post('/settings/qr', upload.single('qr'), uploadFile);
+
+// Rutas de materias
+router.get('/materias', getMaterias);
 
 module.exports = router;

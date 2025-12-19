@@ -32,6 +32,11 @@ const quizSchema = new mongoose.Schema({
     required: [true, 'La categoría es requerida'],
     trim: true
   },
+  materia: {
+    type: String,
+    required: [true, 'La materia es requerida'],
+    trim: true
+  },
   dificultad: {
     type: String,
     enum: ['fácil', 'media', 'difícil'],

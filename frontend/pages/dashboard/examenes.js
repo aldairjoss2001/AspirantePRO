@@ -239,13 +239,6 @@ export default function Examenes() {
           </p>
         </div>
       )}
-        <div className="text-center py-20">
-          <span className="material-symbols-outlined text-gray-300 text-6xl mb-4">
-            task_alt
-          </span>
-          <p className="text-gray-500">No hay exámenes en esta categoría</p>
-        </div>
-      )}
     </DashboardLayout>
   );
 }
