@@ -1,11 +1,14 @@
 import { AuthProvider } from '../lib/AuthContext';
+import { DarkModeProvider } from '../lib/DarkModeContext';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <AuthProvider>
-      <Component {...pageProps} />
-    </AuthProvider>
+    <DarkModeProvider>
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
+    </DarkModeProvider>
   );
 }
 

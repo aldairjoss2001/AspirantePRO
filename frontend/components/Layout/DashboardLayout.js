@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '../../lib/AuthContext';
 import NotificationBell from '../NotificationBell';
+import DarkModeToggle from '../DarkModeToggle';
 
 export default function DashboardLayout({ children, activeTab }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -32,47 +33,48 @@ export default function DashboardLayout({ children, activeTab }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navbar */}
-      <nav className="fixed w-full z-50 bg-white shadow-md">
+      <nav className="fixed w-full z-50 bg-white dark:bg-gray-800 shadow-md">
         <div className="px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <button
               onClick={toggleSidebar}
-              className="text-gray-700 hover:text-blue-700 transition-colors lg:hidden"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors lg:hidden"
             >
               <span className="material-symbols-outlined text-3xl">menu</span>
             </button>
             
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="bg-blue-700 p-2 rounded-xl text-white shadow-lg">
+              <div className="bg-blue-700 dark:bg-blue-600 p-2 rounded-xl text-white shadow-lg">
                 <span className="material-symbols-outlined text-2xl">menu_book</span>
               </div>
-              <span className="text-xl font-bold text-blue-900 tracking-tighter">
-                Aspirante<span className="text-blue-500">Pro</span>
+              <span className="text-xl font-bold text-blue-900 dark:text-blue-400 tracking-tighter">
+                Aspirante<span className="text-blue-500 dark:text-blue-300">Pro</span>
               </span>
             </Link>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <DarkModeToggle />
             <NotificationBell />
             
             <div className="text-right hidden md:block">
-              <p className="text-sm font-semibold text-gray-800">{user.nombre_completo}</p>
-              <p className="text-xs text-gray-500">
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{user.nombre_completo}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {user.status_pago === 'activo' ? (
-                  <span className="text-green-600">✓ Activo</span>
+                  <span className="text-green-600 dark:text-green-400">✓ Activo</span>
                 ) : user.status_pago === 'validando' ? (
-                  <span className="text-yellow-600">⏳ Validando</span>
+                  <span className="text-yellow-600 dark:text-yellow-400">⏳ Validando</span>
                 ) : (
-                  <span className="text-red-600">⚠ Pendiente</span>
+                  <span className="text-red-600 dark:text-red-400">⚠ Pendiente</span>
                 )}
               </p>
             </div>
             
             <button
               onClick={logout}
-              className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-700 rounded-xl hover:bg-red-100 transition-colors font-semibold text-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors font-semibold text-sm"
             >
               <span className="material-symbols-outlined text-xl">logout</span>
               <span className="hidden md:inline">Salir</span>
@@ -83,7 +85,7 @@ export default function DashboardLayout({ children, activeTab }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white shadow-lg transition-all duration-300 z-40 ${
+        className={`fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 z-40 ${
           sidebarOpen ? 'w-64' : 'w-0 lg:w-20'
         }`}
       >
@@ -96,7 +98,7 @@ export default function DashboardLayout({ children, activeTab }) {
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                   router.pathname === item.href
                     ? 'bg-blue-700 text-white'
-                    : 'text-gray-700 hover:bg-blue-50'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700'
                 }`}
               >
                 <span className="material-symbols-outlined text-2xl">{item.icon}</span>

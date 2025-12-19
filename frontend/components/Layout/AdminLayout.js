@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '../../lib/AuthContext';
+import DarkModeToggle from '../DarkModeToggle';
 
 export default function AdminLayout({ children, activeTab }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -33,9 +34,9 @@ export default function AdminLayout({ children, activeTab }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navbar */}
-      <nav className="fixed w-full z-50 bg-gradient-to-r from-blue-900 to-blue-800 shadow-lg">
+      <nav className="fixed w-full z-50 bg-gradient-to-r from-blue-900 to-blue-800 dark:from-gray-800 dark:to-gray-900 shadow-lg">
         <div className="px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <button
@@ -55,15 +56,17 @@ export default function AdminLayout({ children, activeTab }) {
             </Link>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <DarkModeToggle />
+            
             <div className="text-right hidden md:block">
-              <p className="text-sm font-semibold text-white">{user.nombre_completo}</p>
-              <p className="text-xs text-blue-200">Administrador</p>
+              <p className="text-sm font-semibold text-white dark:text-gray-200">{user.nombre_completo}</p>
+              <p className="text-xs text-blue-200 dark:text-gray-400">Administrador</p>
             </div>
             
             <button
               onClick={logout}
-              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-semibold text-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-xl hover:bg-red-700 dark:hover:bg-red-800 transition-colors font-semibold text-sm"
             >
               <span className="material-symbols-outlined text-xl">logout</span>
               <span className="hidden md:inline">Salir</span>
@@ -74,7 +77,7 @@ export default function AdminLayout({ children, activeTab }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white shadow-lg transition-all duration-300 z-40 ${
+        className={`fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 z-40 ${
           sidebarOpen ? 'w-64' : 'w-0 lg:w-20'
         }`}
       >
