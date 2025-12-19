@@ -4,14 +4,17 @@ import { useAuth } from '../../lib/AuthContext';
 import api from '../../lib/axios';
 
 export default function Biblioteca() {
-  const { hasActiveAccess } = useAuth();
+  const { hasActiveAccess, user } = useAuth();
   const [libros, setLibros] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedMateria, setSelectedMateria] = useState('all');
   const [selectedCategoria, setSelectedCategoria] = useState('all');
+  const [materias, setMaterias] = useState([]);
   const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
     fetchLibros();
+    fetchMaterias();
     fetchCategorias();
   }, []);
 
@@ -28,6 +31,15 @@ export default function Biblioteca() {
     }
   };
 
+  const fetchMaterias = async () => {
+    try {
+      const { data } = await api.get('/content/materias');
+      setMaterias(data.data.materias_usuario || []);
+    } catch (error) {
+      console.error('Error al cargar materias:', error);
+    }
+  };
+
   const fetchCategorias = async () => {
     try {
       const { data } = await api.get('/content/categories');
@@ -37,9 +49,15 @@ export default function Biblioteca() {
     }
   };
 
-  const filteredLibros = selectedCategoria === 'all'
-    ? libros
-    : libros.filter(libro => libro.categoria === selectedCategoria);
+  const filteredLibros = libros.filter(libro => {
+    const matchesMateria = selectedMateria === 'all' || libro.materia === selectedMateria;
+    const matchesCategoria = selectedCategoria === 'all' || libro.categoria === selectedCategoria;
+    return matchesMateria && matchesCategoria;
+  });
+
+  const getFileUrl = (libro) => {
+    return libro.archivo_local || libro.url_archivo;
+  };
 
   if (!hasActiveAccess) {
     return (
@@ -70,12 +88,50 @@ export default function Biblioteca() {
           <span className="material-symbols-outlined text-4xl text-blue-700">auto_stories</span>
           Biblioteca Digital
         </h1>
-        </h1>
         <p className="text-gray-600">Accede a toda la bibliografía oficial</p>
       </div>
 
-      {/* Filtros */}
+      {/* Filtros por Materia */}
+      {materias.length > 0 && (
+        <div className="mb-6 bg-white rounded-xl shadow-md p-4">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+            <span className="material-symbols-outlined text-lg">school</span>
+            Filtrar por Materia
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => setSelectedMateria('all')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                selectedMateria === 'all'
+                  ? 'bg-purple-700 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Todas
+            </button>
+            {materias.map((materia) => (
+              <button
+                key={materia}
+                onClick={() => setSelectedMateria(materia)}
+                className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                  selectedMateria === materia
+                    ? 'bg-purple-700 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {materia}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Filtros por Categoría */}
       <div className="mb-6 bg-white rounded-xl shadow-md p-4">
+        <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+          <span className="material-symbols-outlined text-lg">filter_list</span>
+          Filtrar por Categoría
+        </h3>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => setSelectedCategoria('all')}
@@ -124,9 +180,14 @@ export default function Biblioteca() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-bold text-gray-800 mb-2">{libro.titulo}</h3>
-                  <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                    {libro.categoria}
-                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-semibold">
+                      {libro.materia}
+                    </span>
+                    <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
+                      {libro.categoria}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -136,7 +197,7 @@ export default function Biblioteca() {
 
               <div className="flex gap-2">
                 <a
-                  href={libro.url_archivo}
+                  href={getFileUrl(libro)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-xl font-semibold hover:bg-blue-800 transition-colors"
@@ -145,9 +206,9 @@ export default function Biblioteca() {
                   Ver
                 </a>
                 <a
-                  href={libro.url_archivo}
+                  href={getFileUrl(libro)}
                   download
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors"
+                  className="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors flex items-center gap-1"
                   title="Descargar"
                 >
                   <span className="material-symbols-outlined">download</span>
@@ -158,10 +219,14 @@ export default function Biblioteca() {
         </div>
       ) : (
         <div className="text-center py-20">
-          <span className="material-symbols-outlined text-gray-300 text-6xl mb-4">
+          <span className="material-symbols-outlined text-gray-300 text-6xl mb-4 block">
             library_books
           </span>
-          <p className="text-gray-500">No hay libros en esta categoría</p>
+          <p className="text-gray-500">
+            {selectedMateria !== 'all' 
+              ? `No hay libros para la materia de ${selectedMateria}` 
+              : 'No hay libros disponibles'}
+          </p>
         </div>
       )}
     </DashboardLayout>

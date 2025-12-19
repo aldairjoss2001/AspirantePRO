@@ -7,11 +7,14 @@ export default function Examenes() {
   const { hasActiveAccess } = useAuth();
   const [examenes, setExamenes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedMateria, setSelectedMateria] = useState('all');
   const [selectedCategoria, setSelectedCategoria] = useState('all');
+  const [materias, setMaterias] = useState([]);
   const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
     fetchExamenes();
+    fetchMaterias();
     fetchCategorias();
   }, []);
 
@@ -28,6 +31,15 @@ export default function Examenes() {
     }
   };
 
+  const fetchMaterias = async () => {
+    try {
+      const { data } = await api.get('/content/materias');
+      setMaterias(data.data.materias_usuario || []);
+    } catch (error) {
+      console.error('Error al cargar materias:', error);
+    }
+  };
+
   const fetchCategorias = async () => {
     try {
       const { data } = await api.get('/content/categories');
@@ -37,9 +49,15 @@ export default function Examenes() {
     }
   };
 
-  const filteredExamenes = selectedCategoria === 'all'
-    ? examenes
-    : examenes.filter(examen => examen.categoria === selectedCategoria);
+  const filteredExamenes = examenes.filter(examen => {
+    const matchesMateria = selectedMateria === 'all' || examen.materia === selectedMateria;
+    const matchesCategoria = selectedCategoria === 'all' || examen.categoria === selectedCategoria;
+    return matchesMateria && matchesCategoria;
+  });
+
+  const getFileUrl = (examen) => {
+    return examen.archivo_local || examen.url_archivo;
+  };
 
   if (!hasActiveAccess) {
     return (
@@ -70,12 +88,50 @@ export default function Examenes() {
           <span className="material-symbols-outlined text-4xl text-green-700">task</span>
           Banco de Exámenes
         </h1>
-        </h1>
         <p className="text-gray-600">Exámenes pasados con respuestas explicadas</p>
       </div>
 
-      {/* Filtros */}
+      {/* Filtros por Materia */}
+      {materias.length > 0 && (
+        <div className="mb-6 bg-white rounded-xl shadow-md p-4">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+            <span className="material-symbols-outlined text-lg">school</span>
+            Filtrar por Materia
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => setSelectedMateria('all')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                selectedMateria === 'all'
+                  ? 'bg-purple-700 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Todas
+            </button>
+            {materias.map((materia) => (
+              <button
+                key={materia}
+                onClick={() => setSelectedMateria(materia)}
+                className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                  selectedMateria === materia
+                    ? 'bg-purple-700 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {materia}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Filtros por Categoría */}
       <div className="mb-6 bg-white rounded-xl shadow-md p-4">
+        <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+          <span className="material-symbols-outlined text-lg">filter_list</span>
+          Filtrar por Categoría
+        </h3>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => setSelectedCategoria('all')}
@@ -124,9 +180,14 @@ export default function Examenes() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-bold text-gray-800 mb-2">{examen.titulo}</h3>
-                  <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
-                    {examen.categoria}
-                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-semibold">
+                      {examen.materia}
+                    </span>
+                    <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
+                      {examen.categoria}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -146,7 +207,7 @@ export default function Examenes() {
 
               <div className="flex gap-2">
                 <a
-                  href={examen.url_archivo}
+                  href={getFileUrl(examen)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-700 text-white rounded-xl font-semibold hover:bg-green-800 transition-colors"
@@ -155,9 +216,9 @@ export default function Examenes() {
                   Ver
                 </a>
                 <a
-                  href={examen.url_archivo}
+                  href={getFileUrl(examen)}
                   download
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-1"
                   title="Descargar"
                 >
                   <span className="material-symbols-outlined">download</span>
@@ -167,6 +228,17 @@ export default function Examenes() {
           ))}
         </div>
       ) : (
+        <div className="text-center py-20">
+          <span className="material-symbols-outlined text-gray-300 text-6xl mb-4 block">
+            assignment
+          </span>
+          <p className="text-gray-500">
+            {selectedMateria !== 'all' 
+              ? `No hay exámenes para la materia de ${selectedMateria}` 
+              : 'No hay exámenes disponibles'}
+          </p>
+        </div>
+      )}
         <div className="text-center py-20">
           <span className="material-symbols-outlined text-gray-300 text-6xl mb-4">
             task_alt
