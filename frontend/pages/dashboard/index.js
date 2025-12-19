@@ -34,24 +34,24 @@ export default function Dashboard() {
   return (
     <DashboardLayout activeTab="dashboard">
       {/* Header de Bienvenida */}
-      <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2 flex items-center gap-3">
-          <span className="material-symbols-outlined text-4xl text-blue-700">waving_hand</span>
+      <div className="mb-8 animate-fade-in-up">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-3">
+          <span className="material-symbols-outlined text-4xl text-blue-700 dark:text-blue-400">waving_hand</span>
           ¡Bienvenido, {user?.nombre_completo?.split(' ')[0]}!
         </h1>
-        <p className="text-gray-600">Prepárate para tu ingreso a la ESFM</p>
+        <p className="text-gray-600 dark:text-gray-300">Prepárate para tu ingreso a la ESFM</p>
       </div>
 
       {/* Alerta de Estado de Pago */}
       {!hasActiveAccess && (
-        <div className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
+        <div className="mb-6 bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 p-4 rounded-lg animate-slide-in-left">
           <div className="flex items-center">
-            <span className="material-symbols-outlined text-yellow-600 text-3xl mr-3">
+            <span className="material-symbols-outlined text-yellow-600 dark:text-yellow-400 text-3xl mr-3">
               warning
             </span>
             <div>
-              <h3 className="text-lg font-semibold text-yellow-800">Acceso Restringido</h3>
-              <p className="text-sm text-yellow-700">
+              <h3 className="text-lg font-semibold text-yellow-800 dark:text-yellow-200">Acceso Restringido</h3>
+              <p className="text-sm text-yellow-700 dark:text-yellow-300">
                 {user?.status_pago === 'validando'
                   ? 'Estamos validando tu pago. Recibirás acceso completo pronto.'
                   : 'Completa tu pago para acceder a todo el contenido.'}

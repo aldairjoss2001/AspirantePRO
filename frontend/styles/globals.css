@@ -333,3 +333,190 @@ h1, h2, h3 {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
+/* ========== DARK MODE IMPROVEMENTS ========== */
+
+/* Asegurar que todos los textos sean legibles en modo oscuro */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #111827;
+  color: #e5e7eb;
+}
+
+/* Textos principales en modo oscuro */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: #f9fafb !important;
+}
+
+.dark p,
+.dark span:not(.material-symbols-outlined),
+.dark label,
+.dark a {
+  color: #d1d5db !important;
+}
+
+/* Inputs y formularios en modo oscuro */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+  border-color: #374151 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Tablas en modo oscuro */
+.dark table {
+  color: #e5e7eb;
+}
+
+.dark th {
+  background-color: #1f2937;
+  color: #f9fafb !important;
+}
+
+.dark td {
+  color: #d1d5db !important;
+  border-color: #374151;
+}
+
+/* Modales en modo oscuro */
+.dark .modal-content,
+.dark [class*="bg-white"] {
+  background-color: #1f2937 !important;
+}
+
+/* Iconos Material Symbols en modo oscuro */
+.dark .material-symbols-outlined {
+  /* Los iconos mantendrán su color específico */
+}
+
+/* Botones y enlaces hover en modo oscuro */
+.dark button:hover,
+.dark a:hover {
+  opacity: 0.9;
+}
+
+/* Badges y etiquetas en modo oscuro - mantener colores originales */
+.dark .bg-blue-100 { background-color: #1e3a8a !important; }
+.dark .text-blue-700 { color: #93c5fd !important; }
+.dark .bg-green-100 { background-color: #065f46 !important; }
+.dark .text-green-700 { color: #86efac !important; }
+.dark .bg-yellow-100 { background-color: #78350f !important; }
+.dark .text-yellow-700 { color: #fde047 !important; }
+.dark .bg-red-100 { background-color: #7f1d1d !important; }
+.dark .text-red-700 { color: #fca5a5 !important; }
+.dark .bg-purple-100 { background-color: #581c87 !important; }
+.dark .text-purple-700 { color: #d8b4fe !important; }
+
+/* Cards y contenedores en modo oscuro */
+.dark .shadow-md,
+.dark .shadow-lg,
+.dark .shadow-xl {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== MOBILE RESPONSIVE IMPROVEMENTS ========== */
+
+/* Mejor espaciado en móviles */
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+  
+  /* Padding reducido en móviles */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Botones más grandes para tocar */
+  button,
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Modales ocupan más espacio en móviles */
+  .modal-content {
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  /* Grids a una columna en móviles */
+  .grid-responsive {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Tablas scroll horizontal en móviles */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Tablets */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) {
+  .hover-lift:hover {
+    transform: translateY(0);
+  }
+  
+  .hover-lift:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* WhatsApp button siempre visible */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+@media (max-width: 640px) {
+  .whatsapp-float {
+    bottom: 15px;
+    right: 15px;
+  }
+}

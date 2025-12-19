@@ -27,7 +27,8 @@ exports.getAllContent = async (req, res, next) => {
     // Filter by user's subject access
     const user = await User.findById(req.user.id);
     if (user && user.materias_acceso && user.materias_acceso.length > 0) {
-      query.materia = { $in: user.materias_acceso };
+      // Include content marked as "Todas las materias" or user's specific subjects
+      query.materia = { $in: [...user.materias_acceso, 'Todas las materias'] };
     }
 
     const content = await Content.find(query).sort('-fecha_subida');
@@ -85,7 +86,8 @@ exports.getQuizzes = async (req, res, next) => {
     // Filter by user's subject access
     const user = await User.findById(req.user.id);
     if (user && user.materias_acceso && user.materias_acceso.length > 0) {
-      query.materia = { $in: user.materias_acceso };
+      // Include quizzes marked as "Todas las materias" or user's specific subjects
+      query.materia = { $in: [...user.materias_acceso, 'Todas las materias'] };
     }
 
     let quizzesQuery = Quiz.find(query).select('-respuesta_correcta -explicacion');
