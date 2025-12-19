@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/Layout/AdminLayout';
 import api from '../../lib/axios';
 
-const MATERIAS_DISPONIBLES = ['Matemáticas', 'Lenguaje', 'Ciencias Sociales', 'Ciencias Naturales', 'Realidad Nacional'];
-
 export default function Contenido() {
   const [contenidos, setContenidos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,6 +10,7 @@ export default function Contenido() {
   const [uploadMethod, setUploadMethod] = useState('url'); // 'url' or 'file'
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [materiasDisponibles, setMateriasDisponibles] = useState([]);
   const [formData, setFormData] = useState({
     tipo: 'libro',
     titulo: '',
@@ -25,7 +24,17 @@ export default function Contenido() {
 
   useEffect(() => {
     fetchContenidos();
+    fetchMaterias();
   }, []);
+
+  const fetchMaterias = async () => {
+    try {
+      const { data } = await api.get('/admin/materias');
+      setMateriasDisponibles(data.data);
+    } catch (error) {
+      console.error('Error al cargar materias:', error);
+    }
+  };
 
   const fetchContenidos = async () => {
     try {
@@ -426,7 +435,7 @@ export default function Contenido() {
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition"
                 >
                   <option value="">Selecciona una materia</option>
-                  {MATERIAS_DISPONIBLES.map((materia) => (
+                  {materiasDisponibles.map((materia) => (
                     <option key={materia} value={materia}>{materia}</option>
                   ))}
                 </select>

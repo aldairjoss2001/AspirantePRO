@@ -7,19 +7,31 @@ export default function Quizzes() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [materiasDisponibles, setMateriasDisponibles] = useState([]);
   const [formData, setFormData] = useState({
     pregunta: '',
     opciones: ['', '', '', ''],
     respuesta_correcta: 0,
     explicacion: '',
     categoria: '',
+    materia: '',
     dificultad: 'media',
     activo: true
   });
 
   useEffect(() => {
     fetchQuizzes();
+    fetchMaterias();
   }, []);
+
+  const fetchMaterias = async () => {
+    try {
+      const { data } = await api.get('/admin/materias');
+      setMateriasDisponibles(data.data);
+    } catch (error) {
+      console.error('Error al cargar materias:', error);
+    }
+  };
 
   const fetchQuizzes = async () => {
     try {
@@ -64,6 +76,7 @@ export default function Quizzes() {
         respuesta_correcta: quiz.respuesta_correcta,
         explicacion: quiz.explicacion,
         categoria: quiz.categoria,
+        materia: quiz.materia || '',
         dificultad: quiz.dificultad || 'media',
         activo: quiz.activo !== undefined ? quiz.activo : true
       });
@@ -92,6 +105,7 @@ export default function Quizzes() {
       respuesta_correcta: 0,
       explicacion: '',
       categoria: '',
+      materia: '',
       dificultad: 'media',
       activo: true
     });
@@ -395,6 +409,25 @@ export default function Quizzes() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-lg">school</span>
+                    Materia
+                  </label>
+                  <select
+                    name="materia"
+                    value={formData.materia}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition"
+                  >
+                    <option value="">Selecciona una materia</option>
+                    {materiasDisponibles.map((materia) => (
+                      <option key={materia} value={materia}>{materia}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                     <span className="material-symbols-outlined text-lg">label</span>
                     Categoría
                   </label>
@@ -405,27 +438,27 @@ export default function Quizzes() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition"
-                    placeholder="Ej: Matemáticas"
+                    placeholder="Ej: Álgebra, Geometría"
                   />
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-lg">speed</span>
-                    Dificultad
-                  </label>
-                  <select
-                    name="dificultad"
-                    value={formData.dificultad}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition"
-                  >
-                    <option value="fácil">Fácil</option>
-                    <option value="media">Media</option>
-                    <option value="difícil">Difícil</option>
-                  </select>
-                </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-lg">speed</span>
+                  Dificultad
+                </label>
+                <select
+                  name="dificultad"
+                  value={formData.dificultad}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition"
+                >
+                  <option value="fácil">Fácil</option>
+                  <option value="media">Media</option>
+                  <option value="difícil">Difícil</option>
+                </select>
               </div>
 
               <div className="flex items-center gap-3">

@@ -113,67 +113,90 @@ export default function Perfil() {
     <DashboardLayout>
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2 flex items-center gap-3">
-            <span className="material-symbols-outlined text-4xl text-blue-700">account_circle</span>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-3">
+            <span className="material-symbols-outlined text-4xl text-blue-700 dark:text-blue-400">account_circle</span>
             Mi Perfil
           </h1>
-          <p className="text-gray-600">Administra tu cuenta y preferencias</p>
+          <p className="text-gray-600 dark:text-gray-400">Administra tu cuenta y preferencias</p>
         </div>
 
         {message && (
           <div className={`mb-6 p-4 rounded-xl ${
             message.includes('exitosamente')
-              ? 'bg-green-50 border border-green-200 text-green-700'
-              : 'bg-red-50 border border-red-200 text-red-700'
+              ? 'bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-300'
+              : 'bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300'
           }`}>
             {message}
           </div>
         )}
 
         {/* Información de Cuenta */}
-        <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-blue-700">badge</span>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <span className="material-symbols-outlined text-blue-700 dark:text-blue-400">badge</span>
             Información de Cuenta
           </h2>
 
           <div className="grid md:grid-cols-2 gap-4 mb-6">
-            <div className="p-4 bg-gray-50 rounded-xl">
-              <p className="text-sm text-gray-600 mb-1">Email</p>
-              <p className="font-semibold text-gray-800">{user?.email}</p>
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Nombre Completo</p>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">{user?.nombre_completo}</p>
             </div>
 
-            <div className="p-4 bg-gray-50 rounded-xl">
-              <p className="text-sm text-gray-600 mb-1">Estado de Pago</p>
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Email</p>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">{user?.email}</p>
+            </div>
+
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Estado de Pago</p>
               <p className="font-semibold">
                 {user?.status_pago === 'activo' ? (
-                  <span className="text-green-600">✓ Activo</span>
+                  <span className="text-green-600 dark:text-green-400">✓ Activo</span>
                 ) : user?.status_pago === 'validando' ? (
-                  <span className="text-yellow-600">⏳ Validando</span>
+                  <span className="text-yellow-600 dark:text-yellow-400">⏳ Validando</span>
                 ) : (
-                  <span className="text-red-600">⚠ Pendiente</span>
+                  <span className="text-red-600 dark:text-red-400">⚠ Pendiente</span>
                 )}
               </p>
             </div>
 
-            <div className="p-4 bg-gray-50 rounded-xl">
-              <p className="text-sm text-gray-600 mb-1">Fecha de Registro</p>
-              <p className="font-semibold text-gray-800">
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Fecha de Registro</p>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">
                 {new Date(user?.fecha_registro).toLocaleDateString('es-BO')}
               </p>
             </div>
 
-            <div className="p-4 bg-gray-50 rounded-xl">
-              <p className="text-sm text-gray-600 mb-1">Rol</p>
-              <p className="font-semibold text-gray-800 capitalize">{user?.rol}</p>
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Rol</p>
+              <p className="font-semibold text-gray-800 dark:text-gray-200 capitalize">{user?.rol}</p>
+            </div>
+
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Materias Habilitadas</p>
+              <div className="flex flex-wrap gap-1 mt-2">
+                {user?.materias_acceso && user?.materias_acceso.length > 0 ? (
+                  user.materias_acceso.map((materia, idx) => (
+                    <span
+                      key={idx}
+                      className="text-xs bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full font-semibold"
+                    >
+                      {materia}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-xs text-gray-400 dark:text-gray-500">Sin materias asignadas</span>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Actualizar Foto de Perfil */}
-        <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-blue-700">photo_camera</span>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <span className="material-symbols-outlined text-blue-700 dark:text-blue-400">photo_camera</span>
             Foto de Perfil
           </h2>
 
@@ -218,48 +241,16 @@ export default function Perfil() {
           </form>
         </div>
 
-        {/* Actualizar Información Personal */}
-        <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-blue-700">edit</span>
-            Información Personal
-          </h2>
-
-          <form onSubmit={handleUpdateProfile} className="space-y-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Nombre Completo
-              </label>
-              <input
-                type="text"
-                name="nombre_completo"
-                value={formData.nombre_completo}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-6 py-3 bg-blue-700 text-white rounded-xl font-semibold hover:bg-blue-800 transition-colors disabled:opacity-50"
-            >
-              {loading ? 'Guardando...' : 'Guardar Cambios'}
-            </button>
-          </form>
-        </div>
-
         {/* Cambiar Contraseña */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-blue-700">lock</span>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <span className="material-symbols-outlined text-blue-700 dark:text-blue-400">lock</span>
             Cambiar Contraseña
           </h2>
 
           <form onSubmit={handleUpdatePassword} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Contraseña Actual
               </label>
               <input
@@ -268,12 +259,12 @@ export default function Perfil() {
                 value={formData.currentPassword}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Nueva Contraseña
               </label>
               <input
@@ -283,12 +274,12 @@ export default function Perfil() {
                 onChange={handleChange}
                 required
                 minLength="6"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Confirmar Nueva Contraseña
               </label>
               <input
@@ -298,7 +289,7 @@ export default function Perfil() {
                 onChange={handleChange}
                 required
                 minLength="6"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
               />
             </div>
 

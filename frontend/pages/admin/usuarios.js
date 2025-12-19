@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/Layout/AdminLayout';
 import api from '../../lib/axios';
 
-const MATERIAS_DISPONIBLES = ['Matemáticas', 'Lenguaje', 'Ciencias Sociales', 'Ciencias Naturales', 'Realidad Nacional'];
-
 export default function Usuarios() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,10 +9,21 @@ export default function Usuarios() {
   const [showMateriasModal, setShowMateriasModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedMaterias, setSelectedMaterias] = useState([]);
+  const [materiasDisponibles, setMateriasDisponibles] = useState([]);
 
   useEffect(() => {
     fetchUsers();
+    fetchMaterias();
   }, []);
+
+  const fetchMaterias = async () => {
+    try {
+      const { data } = await api.get('/admin/materias');
+      setMateriasDisponibles(data.data);
+    } catch (error) {
+      console.error('Error al cargar materias:', error);
+    }
+  };
 
   const fetchUsers = async () => {
     try {
@@ -373,7 +382,7 @@ export default function Usuarios() {
               </p>
               
               <div className="grid md:grid-cols-2 gap-3">
-                {MATERIAS_DISPONIBLES.map((materia) => (
+                {materiasDisponibles.map((materia) => (
                   <label
                     key={materia}
                     className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
@@ -390,11 +399,15 @@ export default function Usuarios() {
                     />
                     <div className="flex items-center gap-2 flex-1">
                       <span className="material-symbols-outlined text-purple-700">
-                        {materia === 'Matemáticas' ? 'calculate' :
-                         materia === 'Lenguaje' ? 'menu_book' :
-                         materia === 'Ciencias Sociales' ? 'public' :
-                         materia === 'Ciencias Naturales' ? 'science' :
-                         'flag'}
+                        {['Matemática', 'Física', 'Química'].includes(materia) ? 'calculate' :
+                         ['Lenguaje', 'Inglés'].includes(materia) ? 'menu_book' :
+                         ['Ciencias Sociales', 'Geografía', 'Religión', 'Psicología Filosofía'].includes(materia) ? 'public' :
+                         ['Biología'].includes(materia) ? 'science' :
+                         ['Música'].includes(materia) ? 'music_note' :
+                         ['Artes Plásticas'].includes(materia) ? 'palette' :
+                         ['Educación Física'].includes(materia) ? 'sports_soccer' :
+                         ['Inicial', 'Primaria'].includes(materia) ? 'child_care' :
+                         'school'}
                       </span>
                       <span className="font-semibold text-gray-800">{materia}</span>
                     </div>
