@@ -2,10 +2,15 @@ import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/Layout/AdminLayout';
 import api from '../../lib/axios';
 
+const MATERIAS_DISPONIBLES = ['Matemáticas', 'Lenguaje', 'Ciencias Sociales', 'Ciencias Naturales', 'Realidad Nacional'];
+
 export default function Usuarios() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // all, activo, validando, pendiente
+  const [showMateriasModal, setShowMateriasModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedMaterias, setSelectedMaterias] = useState([]);
 
   useEffect(() => {
     fetchUsers();
@@ -41,6 +46,34 @@ export default function Usuarios() {
     } catch (error) {
       console.error('Error al cambiar acceso:', error);
       alert('Error al cambiar el acceso del usuario');
+    }
+  };
+
+  const openMateriasModal = (user) => {
+    setSelectedUser(user);
+    setSelectedMaterias(user.materias_acceso || []);
+    setShowMateriasModal(true);
+  };
+
+  const toggleMateria = (materia) => {
+    if (selectedMaterias.includes(materia)) {
+      setSelectedMaterias(selectedMaterias.filter(m => m !== materia));
+    } else {
+      setSelectedMaterias([...selectedMaterias, materia]);
+    }
+  };
+
+  const saveMaterias = async () => {
+    try {
+      await api.put(`/admin/users/${selectedUser._id}/payment-status`, {
+        status_pago: selectedUser.status_pago,
+        materias_acceso: selectedMaterias
+      });
+      setShowMateriasModal(false);
+      fetchUsers();
+    } catch (error) {
+      console.error('Error al actualizar materias:', error);
+      alert('Error al actualizar las materias de acceso');
     }
   };
 
@@ -151,6 +184,12 @@ export default function Usuarios() {
                 </th>
                 <th className="px-6 py-4 text-left font-semibold">
                   <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined">school</span>
+                    Materias
+                  </div>
+                </th>
+                <th className="px-6 py-4 text-left font-semibold">
+                  <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined">calendar_today</span>
                     Registro
                   </div>
@@ -218,11 +257,37 @@ export default function Usuarios() {
                         {user.status_pago}
                       </span>
                     </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-wrap gap-1">
+                        {user.materias_acceso && user.materias_acceso.length > 0 ? (
+                          user.materias_acceso.map((materia, idx) => (
+                            <span
+                              key={idx}
+                              className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-semibold"
+                            >
+                              {materia}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-xs text-gray-400">Sin materias</span>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {new Date(user.fecha_registro).toLocaleDateString('es-BO')}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
+                        {user.rol !== 'admin' && (
+                          <button
+                            onClick={() => openMateriasModal(user)}
+                            className="p-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors"
+                            title="Gestionar materias"
+                          >
+                            <span className="material-symbols-outlined text-xl">school</span>
+                          </button>
+                        )}
+                        
                         {user.status_pago === 'validando' && user.comprobante_url && (
                           <a
                             href={user.comprobante_url}
@@ -272,7 +337,7 @@ export default function Usuarios() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
                     <span className="material-symbols-outlined text-6xl text-gray-300 mb-4 block">
                       person_off
                     </span>
@@ -284,6 +349,77 @@ export default function Usuarios() {
           </table>
         </div>
       </div>
+
+      {/* Modal de Gestión de Materias */}
+      {showMateriasModal && selectedUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                <span className="material-symbols-outlined text-purple-700">school</span>
+                Gestionar Materias - {selectedUser.nombre_completo}
+              </h2>
+              <button
+                onClick={() => setShowMateriasModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <span className="material-symbols-outlined text-3xl">close</span>
+              </button>
+            </div>
+
+            <div className="p-6">
+              <p className="text-gray-600 mb-4">
+                Selecciona las materias a las que el estudiante tendrá acceso:
+              </p>
+              
+              <div className="grid md:grid-cols-2 gap-3">
+                {MATERIAS_DISPONIBLES.map((materia) => (
+                  <label
+                    key={materia}
+                    className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                      selectedMaterias.includes(materia)
+                        ? 'border-purple-600 bg-purple-50'
+                        : 'border-gray-200 hover:border-purple-300'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedMaterias.includes(materia)}
+                      onChange={() => toggleMateria(materia)}
+                      className="w-5 h-5 text-purple-700 rounded focus:ring-purple-500"
+                    />
+                    <div className="flex items-center gap-2 flex-1">
+                      <span className="material-symbols-outlined text-purple-700">
+                        {materia === 'Matemáticas' ? 'calculate' :
+                         materia === 'Lenguaje' ? 'menu_book' :
+                         materia === 'Ciencias Sociales' ? 'public' :
+                         materia === 'Ciencias Naturales' ? 'science' :
+                         'flag'}
+                      </span>
+                      <span className="font-semibold text-gray-800">{materia}</span>
+                    </div>
+                  </label>
+                ))}
+              </div>
+
+              <div className="mt-6 flex gap-4">
+                <button
+                  onClick={() => setShowMateriasModal(false)}
+                  className="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={saveMaterias}
+                  className="flex-1 px-6 py-3 bg-purple-700 text-white rounded-xl font-semibold hover:bg-purple-800 transition-colors"
+                >
+                  Guardar Materias
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }

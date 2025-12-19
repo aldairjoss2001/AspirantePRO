@@ -2,16 +2,23 @@ import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/Layout/AdminLayout';
 import api from '../../lib/axios';
 
+const MATERIAS_DISPONIBLES = ['Matemáticas', 'Lenguaje', 'Ciencias Sociales', 'Ciencias Naturales', 'Realidad Nacional'];
+
 export default function Contenido() {
   const [contenidos, setContenidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [uploadMethod, setUploadMethod] = useState('url'); // 'url' or 'file'
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     tipo: 'libro',
     titulo: '',
     url_archivo: '',
+    archivo_local: '',
     categoria: '',
+    materia: '',
     descripcion: '',
     visible: true
   });
@@ -32,14 +39,52 @@ export default function Contenido() {
     }
   };
 
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const uploadFile = async () => {
+    if (!selectedFile) return null;
+    
+    setUploading(true);
+    try {
+      const fileFormData = new FormData();
+      fileFormData.append('archivo', selectedFile);
+      
+      const { data } = await api.post('/admin/content/upload', fileFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      setUploading(false);
+      return data.data.path;
+    } catch (error) {
+      console.error('Error al subir archivo:', error);
+      setUploading(false);
+      throw error;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
+      let dataToSubmit = { ...formData };
+      
+      // Handle file upload if selected
+      if (uploadMethod === 'file' && selectedFile) {
+        const filePath = await uploadFile();
+        dataToSubmit.archivo_local = filePath;
+        dataToSubmit.url_archivo = '';
+      } else if (uploadMethod === 'url') {
+        dataToSubmit.archivo_local = '';
+      }
+      
       if (editingId) {
-        await api.put(`/admin/content/${editingId}`, formData);
+        await api.put(`/admin/content/${editingId}`, dataToSubmit);
       } else {
-        await api.post('/admin/content', formData);
+        await api.post('/admin/content', dataToSubmit);
       }
       
       setShowModal(false);
@@ -56,11 +101,14 @@ export default function Contenido() {
     setFormData({
       tipo: contenido.tipo,
       titulo: contenido.titulo,
-      url_archivo: contenido.url_archivo,
+      url_archivo: contenido.url_archivo || '',
+      archivo_local: contenido.archivo_local || '',
       categoria: contenido.categoria,
+      materia: contenido.materia || '',
       descripcion: contenido.descripcion || '',
       visible: contenido.visible
     });
+    setUploadMethod(contenido.archivo_local ? 'file' : 'url');
     setShowModal(true);
   };
 
@@ -81,11 +129,15 @@ export default function Contenido() {
       tipo: 'libro',
       titulo: '',
       url_archivo: '',
+      archivo_local: '',
       categoria: '',
+      materia: '',
       descripcion: '',
       visible: true
     });
     setEditingId(null);
+    setUploadMethod('url');
+    setSelectedFile(null);
   };
 
   const handleChange = (e) => {
@@ -283,20 +335,101 @@ export default function Contenido() {
                 />
               </div>
 
+              {/* Upload Method Selection */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-lg">link</span>
-                  URL del Archivo
+                  <span className="material-symbols-outlined text-lg">upload_file</span>
+                  Método de Carga
                 </label>
-                <input
-                  type="url"
-                  name="url_archivo"
-                  value={formData.url_archivo}
+                <div className="flex gap-4 mb-3">
+                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                    uploadMethod === 'url'
+                      ? 'border-purple-600 bg-purple-50'
+                      : 'border-gray-200 hover:border-purple-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="uploadMethod"
+                      value="url"
+                      checked={uploadMethod === 'url'}
+                      onChange={() => setUploadMethod('url')}
+                      className="w-4 h-4 text-purple-700"
+                    />
+                    <span className="material-symbols-outlined text-purple-700">link</span>
+                    <span className="font-semibold">URL Externa</span>
+                  </label>
+                  
+                  <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                    uploadMethod === 'file'
+                      ? 'border-purple-600 bg-purple-50'
+                      : 'border-gray-200 hover:border-purple-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="uploadMethod"
+                      value="file"
+                      checked={uploadMethod === 'file'}
+                      onChange={() => setUploadMethod('file')}
+                      className="w-4 h-4 text-purple-700"
+                    />
+                    <span className="material-symbols-outlined text-purple-700">upload</span>
+                    <span className="font-semibold">Archivo Local</span>
+                  </label>
+                </div>
+              </div>
+
+              {uploadMethod === 'url' ? (
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-lg">link</span>
+                    URL del Archivo
+                  </label>
+                  <input
+                    type="url"
+                    name="url_archivo"
+                    value={formData.url_archivo}
+                    onChange={handleChange}
+                    required={uploadMethod === 'url'}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition"
+                    placeholder="https://ejemplo.com/archivo.pdf"
+                  />
+                </div>
+              ) : (
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-lg">upload</span>
+                    Subir Archivo
+                  </label>
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    onChange={handleFileChange}
+                    required={uploadMethod === 'file' && !editingId}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition"
+                  />
+                  <p className="text-xs text-gray-500 mt-2">
+                    Formatos aceptados: PDF, DOC, DOCX, JPG, PNG
+                  </p>
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-lg">school</span>
+                  Materia
+                </label>
+                <select
+                  name="materia"
+                  value={formData.materia}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition"
-                  placeholder="https://ejemplo.com/archivo.pdf"
-                />
+                >
+                  <option value="">Selecciona una materia</option>
+                  {MATERIAS_DISPONIBLES.map((materia) => (
+                    <option key={materia} value={materia}>{materia}</option>
+                  ))}
+                </select>
               </div>
 
               <div>
@@ -311,7 +444,7 @@ export default function Contenido() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition"
-                  placeholder="Ej: Matemáticas, Lenguaje, etc."
+                  placeholder="Ej: Álgebra, Geometría, etc."
                 />
               </div>
 
@@ -352,15 +485,24 @@ export default function Contenido() {
                     setShowModal(false);
                     resetForm();
                   }}
-                  className="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-colors"
+                  disabled={uploading}
+                  className="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-colors disabled:opacity-50"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-6 py-3 bg-purple-700 text-white rounded-xl font-semibold hover:bg-purple-800 transition-colors"
+                  disabled={uploading}
+                  className="flex-1 px-6 py-3 bg-purple-700 text-white rounded-xl font-semibold hover:bg-purple-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  {editingId ? 'Guardar Cambios' : 'Crear Contenido'}
+                  {uploading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Subiendo...
+                    </>
+                  ) : (
+                    editingId ? 'Guardar Cambios' : 'Crear Contenido'
+                  )}
                 </button>
               </div>
             </form>
