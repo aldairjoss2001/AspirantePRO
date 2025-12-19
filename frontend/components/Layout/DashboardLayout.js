@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '../../lib/AuthContext';
+import NotificationBell from '../NotificationBell';
 
 export default function DashboardLayout({ children, activeTab }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -54,6 +55,8 @@ export default function DashboardLayout({ children, activeTab }) {
           </div>
 
           <div className="flex items-center gap-4">
+            <NotificationBell />
+            
             <div className="text-right hidden md:block">
               <p className="text-sm font-semibold text-gray-800">{user.nombre_completo}</p>
               <p className="text-xs text-gray-500">
