@@ -124,10 +124,10 @@ export default function DashboardLayout({ children, activeTab }) {
 
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/59178901234"
+        href="https://wa.me/59160572616"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition-all hover:scale-110 z-50"
+        className="fixed bottom-6 right-6 bg-green-500 dark:bg-green-600 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 dark:hover:bg-green-700 transition-all hover:scale-110 z-50"
         title="Contactar por WhatsApp"
       >
         <svg
