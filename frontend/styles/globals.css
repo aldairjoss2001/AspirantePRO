@@ -372,9 +372,27 @@ h1, h2, h3 {
   border-color: #374151 !important;
 }
 
+/* Fix for white inputs in dark mode - text should be black */
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="number"],
+.dark input[type="date"],
+.dark input[type="datetime-local"],
+.dark input[type="time"],
+.dark input[type="search"],
+.dark input[type="url"],
+.dark input[type="tel"],
+.dark textarea,
+.dark select {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: #d1d5db !important;
+}
+
 .dark input::placeholder,
 .dark textarea::placeholder {
-  color: #9ca3af !important;
+  color: #6b7280 !important;
 }
 
 /* Tablas en modo oscuro */

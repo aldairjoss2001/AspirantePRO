@@ -16,7 +16,10 @@ export default function Quizzes() {
     categoria: '',
     materia: '',
     dificultad: 'media',
-    activo: true
+    activo: true,
+    fecha_inicio: '',
+    fecha_expiracion: '',
+    publicado: true
   });
 
   useEffect(() => {
@@ -78,7 +81,10 @@ export default function Quizzes() {
         categoria: quiz.categoria,
         materia: quiz.materia || '',
         dificultad: quiz.dificultad || 'media',
-        activo: quiz.activo !== undefined ? quiz.activo : true
+        activo: quiz.activo !== undefined ? quiz.activo : true,
+        fecha_inicio: quiz.fecha_inicio ? new Date(quiz.fecha_inicio).toISOString().slice(0, 16) : '',
+        fecha_expiracion: quiz.fecha_expiracion ? new Date(quiz.fecha_expiracion).toISOString().slice(0, 16) : '',
+        publicado: quiz.publicado !== undefined ? quiz.publicado : true
       });
       setShowModal(true);
     } catch (error) {
@@ -107,7 +113,10 @@ export default function Quizzes() {
       categoria: '',
       materia: '',
       dificultad: 'media',
-      activo: true
+      activo: true,
+      fecha_inicio: '',
+      fecha_expiracion: '',
+      publicado: true
     });
     setEditingId(null);
   };
@@ -461,20 +470,69 @@ export default function Quizzes() {
                 </select>
               </div>
 
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  name="activo"
-                  id="activo"
-                  checked={formData.activo}
-                  onChange={handleChange}
-                  className="w-5 h-5 text-green-700 rounded focus:ring-green-500"
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-lg">event</span>
+                    Fecha de Inicio (opcional)
+                  </label>
+                  <input
+                    type="datetime-local"
+                    name="fecha_inicio"
+                    value={formData.fecha_inicio}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition bg-white text-gray-800"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Cuándo estará disponible el examen</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-lg">event_busy</span>
+                    Fecha de Expiración (opcional)
+                  </label>
+                  <input
+                    type="datetime-local"
+                    name="fecha_expiracion"
+                    value={formData.fecha_expiracion}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition bg-white text-gray-800"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Cuándo dejará de estar disponible</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    name="activo"
+                    id="activo"
+                    checked={formData.activo}
+                    onChange={handleChange}
+                    className="w-5 h-5 text-green-700 rounded focus:ring-green-500"
                 />
                 <label htmlFor="activo" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                   <span className="material-symbols-outlined text-lg">check_circle</span>
-                  Pregunta activa (visible en simuladores)
+                  Pregunta activa
                 </label>
               </div>
+
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  name="publicado"
+                  id="publicado"
+                  checked={formData.publicado}
+                  onChange={handleChange}
+                  className="w-5 h-5 text-green-700 rounded focus:ring-green-500"
+                />
+                <label htmlFor="publicado" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-lg">visibility</span>
+                  Publicado (visible para estudiantes)
+                </label>
+              </div>
+            </div>
 
               <div className="flex gap-4 pt-4">
                 <button

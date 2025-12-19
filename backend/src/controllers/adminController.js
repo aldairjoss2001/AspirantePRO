@@ -466,3 +466,210 @@ exports.getMaterias = async (req, res, next) => {
   }
 };
 
+// ============ REPORTES Y ANALÍTICAS ============
+
+// @desc    Obtener reporte de registros de usuarios
+// @route   GET /api/admin/reports/users
+// @access  Private/Admin
+exports.getReportUsers = async (req, res, next) => {
+  try {
+    const { fecha_inicio, fecha_fin } = req.query;
+    
+    let filter = {};
+    if (fecha_inicio && fecha_fin) {
+      filter.fecha_registro = {
+        $gte: new Date(fecha_inicio),
+        $lte: new Date(fecha_fin + 'T23:59:59')
+      };
+    }
+
+    const users = await User.find(filter).sort('-fecha_registro');
+    
+    // Estadísticas por estado
+    const byStatus = await User.aggregate([
+      { $match: filter },
+      { $group: { _id: '$status_pago', count: { $sum: 1 } } }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: users,
+      stats: {
+        total: users.length,
+        byStatus: byStatus.reduce((acc, item) => {
+          acc[item._id] = item.count;
+          return acc;
+        }, {})
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Obtener reporte de pagos
+// @route   GET /api/admin/reports/payments
+// @access  Private/Admin
+exports.getReportPayments = async (req, res, next) => {
+  try {
+    const { fecha_inicio, fecha_fin } = req.query;
+    
+    let filter = { status_pago: { $in: ['validando', 'activo'] } };
+    if (fecha_inicio && fecha_fin) {
+      filter.fecha_registro = {
+        $gte: new Date(fecha_inicio),
+        $lte: new Date(fecha_fin + 'T23:59:59')
+      };
+    }
+
+    const payments = await User.find(filter).sort('-fecha_registro');
+    const activePaid = payments.filter(u => u.status_pago === 'activo').length;
+    const totalRevenue = activePaid * 15; // 15 Bs por usuario
+
+    res.status(200).json({
+      success: true,
+      data: payments,
+      stats: {
+        total: payments.length,
+        activos: activePaid,
+        validando: payments.length - activePaid,
+        ingresos_bs: totalRevenue
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Obtener reporte de contenido
+// @route   GET /api/admin/reports/content
+// @access  Private/Admin
+exports.getReportContent = async (req, res, next) => {
+  try {
+    const { fecha_inicio, fecha_fin, tipo } = req.query;
+    
+    let filter = {};
+    if (fecha_inicio && fecha_fin) {
+      filter.createdAt = {
+        $gte: new Date(fecha_inicio),
+        $lte: new Date(fecha_fin + 'T23:59:59')
+      };
+    }
+    if (tipo) {
+      filter.tipo = tipo;
+    }
+
+    const content = await Content.find(filter).sort('-createdAt');
+    
+    // Estadísticas por tipo y materia
+    const byType = await Content.aggregate([
+      { $match: filter },
+      { $group: { _id: '$tipo', count: { $sum: 1 } } }
+    ]);
+
+    const byMateria = await Content.aggregate([
+      { $match: filter },
+      { $group: { _id: '$materia', count: { $sum: 1 } } }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: content,
+      stats: {
+        total: content.length,
+        byType: byType.reduce((acc, item) => {
+          acc[item._id] = item.count;
+          return acc;
+        }, {}),
+        byMateria: byMateria.reduce((acc, item) => {
+          acc[item._id] = item.count;
+          return acc;
+        }, {})
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Obtener reporte de quizzes
+// @route   GET /api/admin/reports/quizzes
+// @access  Private/Admin
+exports.getReportQuizzes = async (req, res, next) => {
+  try {
+    const { fecha_inicio, fecha_fin } = req.query;
+    
+    let filter = {};
+    if (fecha_inicio && fecha_fin) {
+      filter.createdAt = {
+        $gte: new Date(fecha_inicio),
+        $lte: new Date(fecha_fin + 'T23:59:59')
+      };
+    }
+
+    const quizzes = await Quiz.find(filter).sort('-createdAt');
+    
+    // Estadísticas por dificultad y materia
+    const byDificultad = await Quiz.aggregate([
+      { $match: filter },
+      { $group: { _id: '$dificultad', count: { $sum: 1 } } }
+    ]);
+
+    const byMateria = await Quiz.aggregate([
+      { $match: filter },
+      { $group: { _id: '$materia', count: { $sum: 1 } } }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: quizzes,
+      stats: {
+        total: quizzes.length,
+        byDificultad: byDificultad.reduce((acc, item) => {
+          acc[item._id] = item.count;
+          return acc;
+        }, {}),
+        byMateria: byMateria.reduce((acc, item) => {
+          acc[item._id] = item.count;
+          return acc;
+        }, {})
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Obtener reporte de accesos por materia
+// @route   GET /api/admin/reports/access
+// @access  Private/Admin
+exports.getReportAccess = async (req, res, next) => {
+  try {
+    const users = await User.find({ status_pago: 'activo' });
+    
+    // Contar usuarios por materia
+    const accessByMateria = {};
+    users.forEach(user => {
+      if (user.materias_acceso && user.materias_acceso.length > 0) {
+        user.materias_acceso.forEach(materia => {
+          accessByMateria[materia] = (accessByMateria[materia] || 0) + 1;
+        });
+      }
+    });
+
+    res.status(200).json({
+      success: true,
+      data: accessByMateria,
+      stats: {
+        totalUsers: users.length,
+        materiasPopulares: Object.entries(accessByMateria)
+          .sort(([,a], [,b]) => b - a)
+          .slice(0, 5)
+          .map(([materia, count]) => ({ materia, count }))
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

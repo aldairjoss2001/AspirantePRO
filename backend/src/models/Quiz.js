@@ -45,6 +45,18 @@ const quizSchema = new mongoose.Schema({
   activo: {
     type: Boolean,
     default: true
+  },
+  fecha_inicio: {
+    type: Date,
+    default: null
+  },
+  fecha_expiracion: {
+    type: Date,
+    default: null
+  },
+  publicado: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true

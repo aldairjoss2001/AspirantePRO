@@ -18,7 +18,12 @@ const {
   deleteNotification,
   getSettings,
   updateSettings,
-  getMaterias
+  getMaterias,
+  getReportUsers,
+  getReportPayments,
+  getReportContent,
+  getReportQuizzes,
+  getReportAccess
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/auth');
 const upload = require('../config/upload');
@@ -59,5 +64,12 @@ router.post('/settings/qr', upload.single('qr'), uploadFile);
 
 // Rutas de materias
 router.get('/materias', getMaterias);
+
+// Rutas de reportes
+router.get('/reports/users', getReportUsers);
+router.get('/reports/payments', getReportPayments);
+router.get('/reports/content', getReportContent);
+router.get('/reports/quizzes', getReportQuizzes);
+router.get('/reports/access', getReportAccess);
 
 module.exports = router;

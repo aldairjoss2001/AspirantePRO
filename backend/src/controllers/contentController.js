@@ -66,14 +66,23 @@ exports.getContent = async (req, res, next) => {
   }
 };
 
-// @desc    Obtener quizzes para simulacro (filtrado por materias de acceso)
+// @desc    Obtener quizzes para simulacro (filtrado por materias de acceso y fechas)
 // @route   GET /api/quizzes
 // @access  Private (requiere acceso activo)
 exports.getQuizzes = async (req, res, next) => {
   try {
     const { categoria, materia, limite } = req.query;
     
-    let query = { activo: true };
+    let query = { activo: true, publicado: true };
+    
+    // Filtrar por fechas de disponibilidad
+    const now = new Date();
+    query.$or = [
+      { fecha_inicio: { $lte: now }, fecha_expiracion: { $gte: now } },
+      { fecha_inicio: null, fecha_expiracion: null },
+      { fecha_inicio: { $lte: now }, fecha_expiracion: null },
+      { fecha_inicio: null, fecha_expiracion: { $gte: now } }
+    ];
     
     if (categoria) {
       query.categoria = categoria;
