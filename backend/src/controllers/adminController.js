@@ -22,16 +22,21 @@ exports.getAllUsers = async (req, res, next) => {
   }
 };
 
-// @desc    Actualizar estado de pago de usuario
+// @desc    Actualizar estado de pago y materias de usuario
 // @route   PUT /api/admin/users/:id/payment-status
 // @access  Private/Admin
 exports.updatePaymentStatus = async (req, res, next) => {
   try {
-    const { status_pago } = req.body;
+    const { status_pago, materias_acceso } = req.body;
+    
+    const updateData = { status_pago };
+    if (materias_acceso !== undefined) {
+      updateData.materias_acceso = materias_acceso;
+    }
 
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      { status_pago },
+      updateData,
       { new: true, runValidators: true }
     );
 
@@ -78,6 +83,31 @@ exports.toggleUserAccess = async (req, res, next) => {
 };
 
 // ============ GESTIÓN DE CONTENIDO ============
+
+// @desc    Subir archivo local
+// @route   POST /api/admin/content/upload
+// @access  Private/Admin
+exports.uploadFile = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'Por favor suba un archivo'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: {
+        filename: req.file.filename,
+        path: `/uploads/${req.file.filename}`,
+        originalname: req.file.originalname
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // @desc    Crear contenido
 // @route   POST /api/admin/content

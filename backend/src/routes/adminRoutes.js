@@ -4,6 +4,7 @@ const {
   getAllUsers,
   updatePaymentStatus,
   toggleUserAccess,
+  uploadFile,
   createContent,
   updateContent,
   deleteContent,
@@ -17,6 +18,7 @@ const {
   deleteNotification
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/auth');
+const upload = require('../config/upload');
 
 // Proteger todas las rutas y requerir rol de admin
 router.use(protect);
@@ -28,6 +30,7 @@ router.put('/users/:id/payment-status', updatePaymentStatus);
 router.put('/users/:id/toggle-access', toggleUserAccess);
 
 // Rutas de gestión de contenido
+router.post('/content/upload', upload.single('archivo'), uploadFile);
 router.post('/content', createContent);
 router.put('/content/:id', updateContent);
 router.delete('/content/:id', deleteContent);

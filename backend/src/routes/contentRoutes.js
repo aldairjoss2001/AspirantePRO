@@ -6,11 +6,13 @@ const {
   getQuizzes,
   checkQuizAnswers,
   getNotifications,
-  getCategories
+  getCategories,
+  getMaterias
 } = require('../controllers/contentController');
 const { protect, checkActiveAccess } = require('../middleware/auth');
 
 router.get('/content/categories', protect, getCategories);
+router.get('/content/materias', protect, getMaterias);
 router.get('/content', protect, checkActiveAccess, getAllContent);
 router.get('/content/:id', protect, checkActiveAccess, getContent);
 router.get('/quizzes', protect, checkActiveAccess, getQuizzes);

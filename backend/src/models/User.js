@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
     enum: ['pendiente', 'validando', 'activo'],
     default: 'pendiente'
   },
+  materias_acceso: {
+    type: [String],
+    default: []
+  },
   comprobante_url: {
     type: String,
     default: null

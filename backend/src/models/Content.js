@@ -13,11 +13,20 @@ const contentSchema = new mongoose.Schema({
   },
   url_archivo: {
     type: String,
-    required: [true, 'La URL del archivo es requerida']
+    default: null
+  },
+  archivo_local: {
+    type: String,
+    default: null
   },
   categoria: {
     type: String,
     required: [true, 'La categoría es requerida'],
+    trim: true
+  },
+  materia: {
+    type: String,
+    required: [true, 'La materia es requerida'],
     trim: true
   },
   descripcion: {

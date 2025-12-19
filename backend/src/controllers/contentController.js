@@ -1,13 +1,14 @@
 const Content = require('../models/Content');
 const Quiz = require('../models/Quiz');
 const Notification = require('../models/Notification');
+const User = require('../models/User');
 
-// @desc    Obtener todos los contenidos visibles
+// @desc    Obtener todos los contenidos visibles (filtrado por materias de acceso)
 // @route   GET /api/content
 // @access  Private (requiere acceso activo)
 exports.getAllContent = async (req, res, next) => {
   try {
-    const { tipo, categoria } = req.query;
+    const { tipo, categoria, materia } = req.query;
     
     let query = { visible: true };
     
@@ -17,6 +18,16 @@ exports.getAllContent = async (req, res, next) => {
     
     if (categoria) {
       query.categoria = categoria;
+    }
+    
+    if (materia) {
+      query.materia = materia;
+    }
+    
+    // Filter by user's subject access
+    const user = await User.findById(req.user.id);
+    if (user && user.materias_acceso && user.materias_acceso.length > 0) {
+      query.materia = { $in: user.materias_acceso };
     }
 
     const content = await Content.find(query).sort('-fecha_subida');
@@ -165,6 +176,29 @@ exports.getCategories = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: categories
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Obtener materias disponibles para el usuario
+// @route   GET /api/content/materias
+// @access  Private
+exports.getMaterias = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const materiasUsuario = user.materias_acceso || [];
+    
+    // Get all available materias
+    const todasMaterias = await Content.distinct('materia');
+
+    res.status(200).json({
+      success: true,
+      data: {
+        materias_disponibles: todasMaterias,
+        materias_usuario: materiasUsuario
+      }
     });
   } catch (error) {
     next(error);
