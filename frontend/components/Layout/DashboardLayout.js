@@ -22,12 +22,17 @@ export default function DashboardLayout({ children, activeTab }) {
   };
 
   const menuItems = [
-    { name: 'Dashboard', icon: 'dashboard', href: '/dashboard' },
-    { name: 'Biblioteca', icon: 'auto_stories', href: '/dashboard/biblioteca' },
-    { name: 'Exámenes', icon: 'task', href: '/dashboard/examenes' },
-    { name: 'Simuladores', icon: 'quiz', href: '/dashboard/simuladores' },
-    { name: 'Perfil', icon: 'account_circle', href: '/dashboard/perfil' },
+    { name: 'Dashboard', icon: 'dashboard', href: '/dashboard', requiresAccess: false },
+    { name: 'Biblioteca', icon: 'auto_stories', href: '/dashboard/biblioteca', requiresAccess: true },
+    { name: 'Exámenes', icon: 'task', href: '/dashboard/examenes', requiresAccess: true },
+    { name: 'Simuladores', icon: 'quiz', href: '/dashboard/simuladores', requiresAccess: true },
+    { name: 'Perfil', icon: 'account_circle', href: '/dashboard/perfil', requiresAccess: false },
   ];
+
+  const isAccessBlocked = (item) => {
+    if (!item.requiresAccess) return false;
+    return user?.status_pago !== 'activo';
+  };
 
   if (!user) {
     return <LoadingSpinner fullScreen message="Cargando panel..." />;
@@ -92,23 +97,39 @@ export default function DashboardLayout({ children, activeTab }) {
       >
         <div className={`p-4 h-full overflow-y-auto ${!sidebarOpen && 'hidden lg:block'}`}>
           <nav className="space-y-2">
-            {menuItems.map((item, index) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 hover:scale-105 hover-lift stagger-item ${
-                  router.pathname === item.href
-                    ? 'bg-blue-700 text-white shadow-lg'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700'
-                }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <span className="material-symbols-outlined text-2xl">{item.icon}</span>
-                <span className={`font-semibold ${!sidebarOpen && 'lg:hidden'}`}>
-                  {item.name}
-                </span>
-              </Link>
-            ))}
+            {menuItems.map((item, index) => {
+              const blocked = isAccessBlocked(item);
+              return blocked ? (
+                <div
+                  key={item.href}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl opacity-50 cursor-not-allowed stagger-item text-gray-500 dark:text-gray-500"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                  title="Acceso bloqueado - Esperando aprobación del administrador"
+                >
+                  <span className="material-symbols-outlined text-2xl">{item.icon}</span>
+                  <span className={`font-semibold ${!sidebarOpen && 'lg:hidden'} flex-1`}>
+                    {item.name}
+                  </span>
+                  <span className="material-symbols-outlined text-red-500">lock</span>
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 hover:scale-105 hover-lift stagger-item ${
+                    router.pathname === item.href
+                      ? 'bg-blue-700 text-white shadow-lg'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700'
+                  }`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <span className="material-symbols-outlined text-2xl">{item.icon}</span>
+                  <span className={`font-semibold ${!sidebarOpen && 'lg:hidden'}`}>
+                    {item.name}
+                  </span>
+                </Link>
+              );
+            })}
           </nav>
         </div>
       </aside>

@@ -84,6 +84,42 @@ exports.toggleUserAccess = async (req, res, next) => {
   }
 };
 
+// @desc    Actualizar rol de usuario
+// @route   PUT /api/admin/users/:id/role
+// @access  Private/Admin
+exports.updateUserRole = async (req, res, next) => {
+  try {
+    const { rol } = req.body;
+
+    if (!['admin', 'estudiante'].includes(rol)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Rol inválido'
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { rol },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: user
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // ============ GESTIÓN DE CONTENIDO ============
 
 // @desc    Subir archivo local

@@ -4,6 +4,7 @@ const {
   getAllUsers,
   updatePaymentStatus,
   toggleUserAccess,
+  updateUserRole,
   uploadFile,
   createContent,
   updateContent,
@@ -36,6 +37,7 @@ router.use(authorize('admin'));
 router.get('/users', getAllUsers);
 router.put('/users/:id/payment-status', updatePaymentStatus);
 router.put('/users/:id/toggle-access', toggleUserAccess);
+router.put('/users/:id/role', updateUserRole);
 
 // Rutas de gestión de contenido
 router.post('/content/upload', upload.single('archivo'), uploadFile);

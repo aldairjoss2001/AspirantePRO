@@ -18,7 +18,7 @@ export default function Register() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/auth/payment');
+      router.push('/dashboard');
     }
   }, [isAuthenticated]);
 
@@ -49,7 +49,7 @@ export default function Register() {
     });
 
     if (result.success) {
-      router.push('/auth/payment');
+      router.push('/dashboard');
     } else {
       setError(result.message);
       setLoading(false);

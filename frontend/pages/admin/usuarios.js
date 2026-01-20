@@ -10,6 +10,7 @@ export default function Usuarios() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedMaterias, setSelectedMaterias] = useState([]);
   const [materiasDisponibles, setMateriasDisponibles] = useState([]);
+  const [showRoleDropdown, setShowRoleDropdown] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -83,6 +84,19 @@ export default function Usuarios() {
     } catch (error) {
       console.error('Error al actualizar materias:', error);
       alert('Error al actualizar las materias de acceso');
+    }
+  };
+
+  const updateUserRole = async (userId, newRole) => {
+    try {
+      await api.put(`/admin/users/${userId}/role`, {
+        rol: newRole
+      });
+      setShowRoleDropdown(null);
+      fetchUsers();
+    } catch (error) {
+      console.error('Error al actualizar rol:', error);
+      alert('Error al actualizar el rol del usuario');
     }
   };
 
@@ -237,16 +251,41 @@ export default function Usuarios() {
                     </td>
                     <td className="px-6 py-4 text-gray-700">{user.email}</td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
-                        user.rol === 'admin'
-                          ? 'bg-purple-100 text-purple-700'
-                          : 'bg-blue-100 text-blue-700'
-                      }`}>
-                        <span className="material-symbols-outlined text-sm">
-                          {user.rol === 'admin' ? 'admin_panel_settings' : 'school'}
-                        </span>
-                        {user.rol}
-                      </span>
+                      <div className="relative">
+                        <button
+                          onClick={() => setShowRoleDropdown(showRoleDropdown === user._id ? null : user._id)}
+                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold hover:opacity-80 transition-all ${
+                            user.rol === 'admin'
+                              ? 'bg-purple-100 text-purple-700'
+                              : 'bg-blue-100 text-blue-700'
+                          }`}
+                        >
+                          <span className="material-symbols-outlined text-sm">
+                            {user.rol === 'admin' ? 'admin_panel_settings' : 'school'}
+                          </span>
+                          {user.rol}
+                          <span className="material-symbols-outlined text-sm">expand_more</span>
+                        </button>
+                        
+                        {showRoleDropdown === user._id && (
+                          <div className="absolute left-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 min-w-[150px]">
+                            <button
+                              onClick={() => updateUserRole(user._id, 'admin')}
+                              className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-sm"
+                            >
+                              <span className="material-symbols-outlined text-purple-600">admin_panel_settings</span>
+                              <span className="text-gray-800 dark:text-gray-200">Admin</span>
+                            </button>
+                            <button
+                              onClick={() => updateUserRole(user._id, 'estudiante')}
+                              className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-sm border-t border-gray-200 dark:border-gray-700"
+                            >
+                              <span className="material-symbols-outlined text-blue-600">school</span>
+                              <span className="text-gray-800 dark:text-gray-200">Estudiante</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
