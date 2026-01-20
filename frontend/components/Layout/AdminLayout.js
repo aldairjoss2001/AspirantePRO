@@ -26,7 +26,7 @@ export default function AdminLayout({ children, activeTab }) {
     { name: 'Dashboard', icon: 'dashboard', href: '/admin' },
     { name: 'Usuarios', icon: 'group', href: '/admin/usuarios' },
     { name: 'Contenido', icon: 'folder', href: '/admin/contenido' },
-    { name: 'Quizzes', icon: 'quiz', href: '/admin/quizzes' },
+    { name: 'Simulacros', icon: 'quiz', href: '/admin/quizzes' },
     { name: 'Notificaciones', icon: 'notifications', href: '/admin/notificaciones' },
     { name: 'Reportes', icon: 'assessment', href: '/admin/reportes' },
     { name: 'Configuración', icon: 'settings', href: '/admin/configuracion' },

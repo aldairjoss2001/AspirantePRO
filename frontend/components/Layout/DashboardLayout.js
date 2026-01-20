@@ -23,9 +23,8 @@ export default function DashboardLayout({ children, activeTab }) {
 
   const menuItems = [
     { name: 'Dashboard', icon: 'dashboard', href: '/dashboard', requiresAccess: false },
-    { name: 'Biblioteca', icon: 'auto_stories', href: '/dashboard/biblioteca', requiresAccess: true },
-    { name: 'Exámenes', icon: 'task', href: '/dashboard/examenes', requiresAccess: true },
-    { name: 'Simuladores', icon: 'quiz', href: '/dashboard/simuladores', requiresAccess: true },
+    { name: 'Material', icon: 'folder_open', href: '/dashboard/material', requiresAccess: true },
+    { name: 'Simulacros', icon: 'quiz', href: '/dashboard/simuladores', requiresAccess: true },
     { name: 'Perfil', icon: 'account_circle', href: '/dashboard/perfil', requiresAccess: false },
   ];
 
