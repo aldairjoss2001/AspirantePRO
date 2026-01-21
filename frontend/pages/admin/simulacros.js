@@ -272,6 +272,7 @@ export default function Simulacros() {
                   opciones: ['', '', '', ''],
                   respuesta_correcta: 0,
                   explicacion: '',
+                  categoria: '',
                   materia: '',
                   dificultad: 'media',
                   publicado: true
@@ -676,22 +677,36 @@ export default function Simulacros() {
                   ))}
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Respuesta Correcta *
+                  </label>
+                  <select
+                    value={questionFormData.respuesta_correcta}
+                    onChange={(e) => handleQuestionFormChange('respuesta_correcta', parseInt(e.target.value))}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    required
+                  >
+                    <option value={0}>Opción 1</option>
+                    <option value={1}>Opción 2</option>
+                    <option value={2}>Opción 3</option>
+                    <option value={3}>Opción 4</option>
+                  </select>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Respuesta Correcta *
+                      Categoría *
                     </label>
-                    <select
-                      value={questionFormData.respuesta_correcta}
-                      onChange={(e) => handleQuestionFormChange('respuesta_correcta', parseInt(e.target.value))}
+                    <input
+                      type="text"
+                      value={questionFormData.categoria}
+                      onChange={(e) => handleQuestionFormChange('categoria', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                      placeholder="Ej: Álgebra, Geometría, etc."
                       required
-                    >
-                      <option value={0}>Opción 1</option>
-                      <option value={1}>Opción 2</option>
-                      <option value={2}>Opción 3</option>
-                      <option value={3}>Opción 4</option>
-                    </select>
+                    />
                   </div>
 
                   <div>
@@ -748,7 +763,7 @@ export default function Simulacros() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Explicación
+                    Explicación *
                   </label>
                   <textarea
                     value={questionFormData.explicacion}
@@ -756,6 +771,7 @@ export default function Simulacros() {
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                     rows="3"
                     placeholder="Explicación de la respuesta correcta..."
+                    required
                   />
                 </div>
 
