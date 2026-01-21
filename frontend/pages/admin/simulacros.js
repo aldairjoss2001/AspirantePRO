@@ -14,6 +14,8 @@ export default function Simulacros() {
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterMateria, setFilterMateria] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   
   const [formData, setFormData] = useState({
     titulo: '',
@@ -201,13 +203,15 @@ export default function Simulacros() {
     e.preventDefault();
     
     try {
-      await api.post('/quizzes', questionFormData);
+      await api.post('/admin/quizzes', questionFormData);
       setShowCreateQuestionModal(false);
       fetchQuizzes();
-      alert('Pregunta creada exitosamente');
+      setSuccessMessage('Pregunta creada exitosamente');
+      setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
       console.error('Error al crear pregunta:', error);
-      alert(error.response?.data?.message || 'Error al crear la pregunta');
+      setErrorMessage(error.response?.data?.message || 'Error al crear la pregunta');
+      setTimeout(() => setErrorMessage(''), 5000);
     }
   };
 
@@ -234,6 +238,21 @@ export default function Simulacros() {
   return (
     <AdminLayout>
       <div className="space-y-6 animate-fade-in">
+        {/* Success/Error Messages */}
+        {successMessage && (
+          <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-300 px-4 py-3 rounded-xl flex items-center gap-2 animate-bounce-in">
+            <span className="material-symbols-outlined">check_circle</span>
+            <span>{successMessage}</span>
+          </div>
+        )}
+        
+        {errorMessage && (
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl flex items-center gap-2 animate-bounce-in">
+            <span className="material-symbols-outlined">error</span>
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
