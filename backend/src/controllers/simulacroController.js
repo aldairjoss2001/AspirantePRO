@@ -213,8 +213,12 @@ exports.getAvailableSimulacros = async (req, res, next) => {
     ];
 
     // Filtrar por materias del usuario o "Todas las materias"
+    // Si el usuario no tiene materias asignadas, solo muestra "Todas las materias"
     if (userMaterias.length > 0) {
       query.materia = { $in: [...userMaterias, 'Todas las materias'] };
+    } else {
+      // Si no tiene materias asignadas, solo mostrar contenido general
+      query.materia = 'Todas las materias';
     }
 
     const simulacros = await Simulacro.find(query)
