@@ -18,9 +18,8 @@ export default function Login() {
     if (isAuthenticated && user) {
       if (user.rol === 'admin') {
         router.push('/admin');
-      } else if (user.status_pago === 'pendiente') {
-        router.push('/auth/payment');
       } else {
+        // All users go to dashboard, access control is handled within the dashboard
         router.push('/dashboard');
       }
     }
@@ -40,9 +39,8 @@ export default function Login() {
     if (result.success) {
       if (result.data.rol === 'admin') {
         router.push('/admin');
-      } else if (result.data.status_pago === 'pendiente') {
-        router.push('/auth/payment');
       } else {
+        // All users go to dashboard, access control is handled within the dashboard
         router.push('/dashboard');
       }
     } else {
