@@ -4,6 +4,7 @@ const Quiz = require('../models/Quiz');
 const Notification = require('../models/Notification');
 const Settings = require('../models/Settings');
 const { MATERIAS_ESFM } = require('../constants/materias');
+const bcrypt = require('bcryptjs');
 
 // ============ GESTIÓN DE USUARIOS ============
 
@@ -703,6 +704,66 @@ exports.getReportAccess = async (req, res, next) => {
           .slice(0, 5)
           .map(([materia, count]) => ({ materia, count }))
       }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ============ PERFIL DE ADMIN ============
+
+// @desc    Cambiar contraseña de admin
+// @route   PUT /api/admin/profile/change-password
+// @access  Private/Admin
+exports.changeAdminPassword = async (req, res, next) => {
+  try {
+    const { current_password, new_password } = req.body;
+
+    // Obtener usuario con contraseña
+    const user = await User.findById(req.user.id).select('+password');
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado'
+      });
+    }
+
+    // Verificar contraseña actual
+    const isMatch = await bcrypt.compare(current_password, user.password);
+    
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: 'La contraseña actual es incorrecta'
+      });
+    }
+
+    // Actualizar contraseña
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(new_password, salt);
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Contraseña actualizada exitosamente'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Obtener todas las preguntas
+// @route   GET /api/admin/all-questions
+// @access  Private/Admin
+exports.getAllQuestions = async (req, res, next) => {
+  try {
+    const quizzes = await Quiz.find().sort('-createdAt');
+
+    res.status(200).json({
+      success: true,
+      count: quizzes.length,
+      data: quizzes
     });
   } catch (error) {
     next(error);

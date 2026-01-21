@@ -5,11 +5,14 @@ import api from '../../lib/axios';
 export default function Simulacros() {
   const [simulacros, setSimulacros] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
+  const [allQuestions, setAllQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   const [showCreateQuestionModal, setShowCreateQuestionModal] = useState(false);
+  const [showAllQuestionsModal, setShowAllQuestionsModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [editingQuestionId, setEditingQuestionId] = useState(null);
   const [materiasDisponibles, setMateriasDisponibles] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,6 +35,7 @@ export default function Simulacros() {
     pregunta: '',
     opciones: ['', '', '', ''],
     respuesta_correcta: 0,
+    categoria: '',
     explicacion: '',
     materia: '',
     dificultad: 'media',
@@ -203,14 +207,34 @@ export default function Simulacros() {
     e.preventDefault();
     
     try {
-      await api.post('/admin/quizzes', questionFormData);
+      if (editingQuestionId) {
+        // Update existing question
+        await api.put(`/admin/quizzes/${editingQuestionId}`, questionFormData);
+        setSuccessMessage('Pregunta actualizada exitosamente');
+      } else {
+        // Create new question
+        await api.post('/admin/quizzes', questionFormData);
+        setSuccessMessage('Pregunta creada exitosamente');
+      }
+      
       setShowCreateQuestionModal(false);
+      setEditingQuestionId(null);
+      setQuestionFormData({
+        pregunta: '',
+        opciones: ['', '', '', ''],
+        respuesta_correcta: 0,
+        categoria: '',
+        explicacion: '',
+        materia: '',
+        dificultad: 'media',
+        publicado: true
+      });
       fetchQuizzes();
-      setSuccessMessage('Pregunta creada exitosamente');
+      fetchAllQuestions();
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
-      console.error('Error al crear pregunta:', error);
-      setErrorMessage(error.response?.data?.message || 'Error al crear la pregunta');
+      console.error('Error al guardar pregunta:', error);
+      setErrorMessage(error.response?.data?.message || 'Error al guardar la pregunta');
       setTimeout(() => setErrorMessage(''), 5000);
     }
   };
@@ -223,6 +247,72 @@ export default function Simulacros() {
     const newOpciones = [...questionFormData.opciones];
     newOpciones[index] = value;
     setQuestionFormData({ ...questionFormData, opciones: newOpciones });
+  };
+
+  const fetchAllQuestions = async () => {
+    try {
+      const { data } = await api.get('/admin/all-questions');
+      setAllQuestions(data.data);
+    } catch (error) {
+      console.error('Error al cargar todas las preguntas:', error);
+    }
+  };
+
+  const handleEditQuestion = async (questionId) => {
+    try {
+      const question = allQuestions.find(q => q._id === questionId);
+      if (question) {
+        setQuestionFormData({
+          pregunta: question.pregunta,
+          opciones: question.opciones,
+          respuesta_correcta: question.respuesta_correcta,
+          categoria: question.categoria || '',
+          explicacion: question.explicacion || '',
+          materia: question.materia,
+          dificultad: question.dificultad,
+          publicado: question.publicado
+        });
+        setEditingQuestionId(questionId);
+        setShowCreateQuestionModal(true);
+        setShowAllQuestionsModal(false);
+      }
+    } catch (error) {
+      console.error('Error al cargar pregunta:', error);
+    }
+  };
+
+  const handleUpdateQuestion = async (e) => {
+    e.preventDefault();
+    
+    try {
+      await api.put(`/admin/quizzes/${editingQuestionId}`, questionFormData);
+      setShowCreateQuestionModal(false);
+      setEditingQuestionId(null);
+      fetchAllQuestions();
+      fetchQuizzes();
+      setSuccessMessage('Pregunta actualizada exitosamente');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      console.error('Error al actualizar pregunta:', error);
+      setErrorMessage(error.response?.data?.message || 'Error al actualizar la pregunta');
+      setTimeout(() => setErrorMessage(''), 5000);
+    }
+  };
+
+  const handleDeleteQuestion = async (questionId) => {
+    if (!confirm('¿Estás seguro de eliminar esta pregunta?')) return;
+    
+    try {
+      await api.delete(`/admin/quizzes/${questionId}`);
+      fetchAllQuestions();
+      fetchQuizzes();
+      setSuccessMessage('Pregunta eliminada exitosamente');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      console.error('Error al eliminar pregunta:', error);
+      setErrorMessage(error.response?.data?.message || 'Error al eliminar la pregunta');
+      setTimeout(() => setErrorMessage(''), 5000);
+    }
   };
 
   if (loading) {
@@ -267,6 +357,17 @@ export default function Simulacros() {
           <div className="flex gap-3">
             <button
               onClick={() => {
+                fetchAllQuestions();
+                setShowAllQuestionsModal(true);
+              }}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all flex items-center gap-2 hover:scale-105"
+            >
+              <span className="material-symbols-outlined">list</span>
+              Ver Preguntas
+            </button>
+            <button
+              onClick={() => {
+                setEditingQuestionId(null);
                 setQuestionFormData({
                   pregunta: '',
                   opciones: ['', '', '', ''],
@@ -642,7 +743,7 @@ export default function Simulacros() {
           <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-scale-in">
             <div className="p-6">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                Crear Nueva Pregunta
+                {editingQuestionId ? 'Editar Pregunta' : 'Crear Nueva Pregunta'}
               </h2>
               
               <form onSubmit={handleCreateQuestion} className="space-y-4">
@@ -780,7 +881,7 @@ export default function Simulacros() {
                     type="submit"
                     className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-all"
                   >
-                    Crear Pregunta
+                    {editingQuestionId ? 'Actualizar Pregunta' : 'Crear Pregunta'}
                   </button>
                   <button
                     type="button"
@@ -867,6 +968,125 @@ export default function Simulacros() {
                 className="w-full bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-all"
               >
                 Confirmar Selección
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* All Questions Modal */}
+      {showAllQuestionsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4 animate-fade-in">
+          <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-6xl max-h-[90vh] overflow-hidden animate-scale-in flex flex-col">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span className="material-symbols-outlined text-green-600">list</span>
+                Todas las Preguntas ({allQuestions.length})
+              </h3>
+              <button
+                onClick={() => setShowAllQuestionsModal(false)}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                <span className="material-symbols-outlined text-3xl">close</span>
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6">
+              {allQuestions.length === 0 ? (
+                <div className="text-center py-12">
+                  <span className="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600">quiz</span>
+                  <p className="text-gray-500 dark:text-gray-400 mt-4">No hay preguntas creadas</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {allQuestions.map((question, index) => (
+                    <div
+                      key={question._id}
+                      className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-all"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                              #{index + 1}
+                            </span>
+                            <span className="px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+                              {question.materia}
+                            </span>
+                            <span className={`px-2 py-0.5 text-xs rounded-full ${
+                              question.dificultad === 'fácil'
+                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                                : question.dificultad === 'media'
+                                ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'
+                                : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+                            }`}>
+                              {question.dificultad}
+                            </span>
+                            {question.categoria && (
+                              <span className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                                {question.categoria}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-gray-900 dark:text-white font-medium">
+                            {question.pregunta}
+                          </p>
+                        </div>
+                        <div className="flex gap-2 ml-4">
+                          <button
+                            onClick={() => handleEditQuestion(question._id)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all"
+                            title="Editar"
+                          >
+                            <span className="material-symbols-outlined">edit</span>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteQuestion(question._id)}
+                            className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all"
+                            title="Eliminar"
+                          >
+                            <span className="material-symbols-outlined">delete</span>
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-1 text-sm">
+                        {question.opciones.map((opcion, idx) => (
+                          <div
+                            key={idx}
+                            className={`p-2 rounded ${
+                              idx === question.respuesta_correcta
+                                ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300'
+                                : 'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                            }`}
+                          >
+                            {idx === question.respuesta_correcta && (
+                              <span className="material-symbols-outlined text-xs mr-1">check_circle</span>
+                            )}
+                            {opcion}
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {question.explicacion && (
+                        <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                          <p className="text-sm text-blue-900 dark:text-blue-300">
+                            <span className="font-semibold">Explicación:</span> {question.explicacion}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            <div className="p-6 border-t border-gray-200 dark:border-gray-700">
+              <button
+                onClick={() => setShowAllQuestionsModal(false)}
+                className="w-full bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+              >
+                Cerrar
               </button>
             </div>
           </div>

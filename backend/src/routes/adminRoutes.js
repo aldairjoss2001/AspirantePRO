@@ -24,7 +24,9 @@ const {
   getReportPayments,
   getReportContent,
   getReportQuizzes,
-  getReportAccess
+  getReportAccess,
+  changeAdminPassword,
+  getAllQuestions
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/auth');
 const upload = require('../config/upload');
@@ -50,6 +52,7 @@ router.get('/quizzes/:id', getQuiz);
 router.post('/quizzes', createQuiz);
 router.put('/quizzes/:id', updateQuiz);
 router.delete('/quizzes/:id', deleteQuiz);
+router.get('/all-questions', getAllQuestions);
 
 // Rutas de estadísticas
 router.get('/stats', getDashboardStats);
@@ -63,6 +66,9 @@ router.delete('/notifications/:id', deleteNotification);
 router.get('/settings', getSettings);
 router.put('/settings', updateSettings);
 router.post('/settings/qr', upload.single('qr'), uploadFile);
+
+// Rutas de perfil
+router.put('/profile/change-password', changeAdminPassword);
 
 // Rutas de materias
 router.get('/materias', getMaterias);
