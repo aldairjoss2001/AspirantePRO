@@ -191,30 +191,41 @@ exports.getAvailableSimulacros = async (req, res, next) => {
     const userId = req.user.id;
     const userMaterias = req.user.materias_acceso || [];
 
-    // Buscar simulacros publicados y activos
+    // Buscar simulacros publicados
     const now = new Date();
     
     const query = {
-      publicado: true,
-      $or: [
-        { fecha_inicio: null },
-        { fecha_inicio: { $lte: now } }
-      ]
+      publicado: true
     };
 
-    // Agregar filtro de expiración si existe
-    const expirationQuery = [
-      { fecha_expiracion: null },
-      { fecha_expiracion: { $gte: now } }
-    ];
+    // Agregar filtro de fecha de inicio y expiración
+    // Solo mostrar simulacros que:
+    // 1. No tienen fecha_inicio O ya pasó la fecha_inicio
+    // 2. No tienen fecha_expiracion O todavía no expiró
+    const dateFilters = {
+      $and: [
+        {
+          $or: [
+            { fecha_inicio: null },
+            { fecha_inicio: { $exists: false } },
+            { fecha_inicio: { $lte: now } }
+          ]
+        },
+        {
+          $or: [
+            { fecha_expiracion: null },
+            { fecha_expiracion: { $exists: false } },
+            { fecha_expiracion: { $gte: now } }
+          ]
+        }
+      ]
+    };
     
-    query.$and = [
-      { $or: expirationQuery }
-    ];
+    Object.assign(query, dateFilters);
 
     // Filtrar por materias del usuario o "Todas las materias"
-    // Si el usuario no tiene materias asignadas, solo muestra "Todas las materias"
-    if (userMaterias.length > 0) {
+    // Si el usuario no tiene materias asignadas, mostrar contenido general
+    if (userMaterias && userMaterias.length > 0) {
       query.materia = { $in: [...userMaterias, 'Todas las materias'] };
     } else {
       // Si no tiene materias asignadas, solo mostrar contenido general

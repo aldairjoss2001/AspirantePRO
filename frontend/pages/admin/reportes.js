@@ -35,9 +35,6 @@ export default function Reportes() {
         case 'registros':
           endpoint = '/admin/reports/users';
           break;
-        case 'pagos':
-          endpoint = '/admin/reports/payments';
-          break;
         case 'contenido':
           endpoint = '/admin/reports/content';
           break;
@@ -149,47 +146,6 @@ export default function Reportes() {
           </>
         )}
 
-        {tipoReporte === 'pagos' && (
-          <>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover-lift">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Total Pagos</p>
-                  <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.total}</p>
-                </div>
-                <span className="material-symbols-outlined text-5xl text-blue-600 dark:text-blue-400 opacity-20">payments</span>
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover-lift">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Ingresos (Bs.)</p>
-                  <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.ingresos_bs}</p>
-                </div>
-                <span className="material-symbols-outlined text-5xl text-green-600 dark:text-green-400 opacity-20">attach_money</span>
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover-lift">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Activos</p>
-                  <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.activos}</p>
-                </div>
-                <span className="material-symbols-outlined text-5xl text-green-600 dark:text-green-400 opacity-20">verified</span>
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover-lift">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Validando</p>
-                  <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">{stats.validando}</p>
-                </div>
-                <span className="material-symbols-outlined text-5xl text-yellow-600 dark:text-yellow-400 opacity-20">sync</span>
-              </div>
-            </div>
-          </>
-        )}
-
         {(tipoReporte === 'contenido' || tipoReporte === 'quizzes') && (
           <>
             <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover-lift">
@@ -234,7 +190,6 @@ export default function Reportes() {
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 outline-none transition bg-white dark:bg-white text-gray-800"
               >
                 <option value="registros">Registros de Usuarios</option>
-                <option value="pagos">Pagos y Revenue</option>
                 <option value="contenido">Contenido</option>
                 <option value="quizzes">Quizzes</option>
                 <option value="accesos">Accesos por Materia</option>
@@ -307,14 +262,6 @@ export default function Reportes() {
                         <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase">Fecha Registro</th>
                       </>
                     )}
-                    {tipoReporte === 'pagos' && (
-                      <>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase">Nombre</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase">Email</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase">Estado Pago</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase">Materias</th>
-                      </>
-                    )}
                     {tipoReporte === 'contenido' && (
                       <>
                         <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase">Título</th>
@@ -351,23 +298,6 @@ export default function Reportes() {
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
                             {new Date(item.fecha_registro).toLocaleDateString()}
-                          </td>
-                        </>
-                      )}
-                      {tipoReporte === 'pagos' && (
-                        <>
-                          <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{item.nombre_completo}</td>
-                          <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{item.email}</td>
-                          <td className="px-6 py-4">
-                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              item.status_pago === 'activo' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                              'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                            }`}>
-                              {item.status_pago}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
-                            {item.materias_acceso?.join(', ') || 'Ninguna'}
                           </td>
                         </>
                       )}
