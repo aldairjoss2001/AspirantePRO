@@ -11,6 +11,7 @@ const userRoutes = require('./routes/userRoutes');
 const contentRoutes = require('./routes/contentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const publicRoutes = require('./routes/publicRoutes');
+const simulacroRoutes = require('./routes/simulacroRoutes');
 
 // Conectar a la base de datos
 connectDB();
@@ -31,6 +32,7 @@ app.use('/api/users', userRoutes);
 app.use('/api', contentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/public', publicRoutes);
+app.use('/api/simulacros', simulacroRoutes);
 
 // Ruta de prueba
 app.get('/api', (req, res) => {
