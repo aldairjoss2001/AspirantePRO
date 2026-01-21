@@ -156,7 +156,7 @@ export default function Dashboard() {
             </a>
 
             <a
-              href="/dashboard/simuladores"
+              href="/dashboard/simulacros"
               className="flex items-center gap-4 p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors"
             >
               <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center">

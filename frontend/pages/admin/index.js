@@ -141,7 +141,7 @@ export default function AdminDashboard() {
         </a>
 
         <a
-          href="/admin/quizzes"
+          href="/admin/simulacros"
           className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all p-6"
         >
           <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mb-4">

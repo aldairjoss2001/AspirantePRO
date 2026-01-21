@@ -210,16 +210,25 @@ export default function Simulacros() {
               Crea y administra simulacros de examen con preguntas configurables
             </p>
           </div>
-          <button
-            onClick={() => {
-              resetForm();
-              setShowModal(true);
-            }}
-            className="bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-all flex items-center gap-2 hover:scale-105"
-          >
-            <span className="material-symbols-outlined">add</span>
-            Crear Simulacro
-          </button>
+          <div className="flex gap-3">
+            <a
+              href="/admin/quizzes"
+              className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-all flex items-center gap-2 hover:scale-105"
+            >
+              <span className="material-symbols-outlined">add_circle</span>
+              Gestionar Preguntas
+            </a>
+            <button
+              onClick={() => {
+                resetForm();
+                setShowModal(true);
+              }}
+              className="bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-all flex items-center gap-2 hover:scale-105"
+            >
+              <span className="material-symbols-outlined">add</span>
+              Crear Simulacro
+            </button>
+          </div>
         </div>
 
         {/* Stats */}
