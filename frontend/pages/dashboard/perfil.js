@@ -111,17 +111,17 @@ export default function Perfil() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto animate-fade-in">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-3 animate-slide-in-up">
             <span className="material-symbols-outlined text-4xl text-blue-700 dark:text-blue-400">account_circle</span>
             Mi Perfil
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">Administra tu cuenta y preferencias</p>
+          <p className="text-gray-600 dark:text-gray-400 animate-slide-in-up" style={{animationDelay: '0.1s'}}>Administra tu cuenta y preferencias</p>
         </div>
 
         {message && (
-          <div className={`mb-6 p-4 rounded-xl ${
+          <div className={`mb-6 p-4 rounded-xl animate-slide-in-up ${
             message.includes('exitosamente')
               ? 'bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-300'
               : 'bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300'
@@ -131,7 +131,7 @@ export default function Perfil() {
         )}
 
         {/* Información de Cuenta */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 mb-6 animate-scale-in transition-all duration-300 hover:shadow-xl">
           <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
             <span className="material-symbols-outlined text-blue-700 dark:text-blue-400">badge</span>
             Información de Cuenta
@@ -168,9 +168,9 @@ export default function Perfil() {
               </p>
             </div>
 
-            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl animate-fade-in">
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Rol</p>
-              <p className="font-semibold text-gray-800 dark:text-gray-200 capitalize">{user?.rol}</p>
+              <p className="font-semibold text-gray-800 dark:text-gray-200 capitalize">{user?.rol === 'admin' ? 'Admin' : 'Cliente'}</p>
             </div>
 
             <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
@@ -194,7 +194,7 @@ export default function Perfil() {
         </div>
 
         {/* Actualizar Foto de Perfil */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 mb-6 animate-scale-in transition-all duration-300 hover:shadow-xl" style={{animationDelay: '0.1s'}}>
           <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
             <span className="material-symbols-outlined text-blue-700 dark:text-blue-400">photo_camera</span>
             Foto de Perfil
@@ -234,7 +234,7 @@ export default function Perfil() {
             <button
               type="submit"
               disabled={loading || !photoFile}
-              className="px-6 py-3 bg-blue-700 text-white rounded-xl font-semibold hover:bg-blue-800 transition-colors disabled:opacity-50"
+              className="px-6 py-3 bg-blue-700 text-white rounded-xl font-semibold hover:bg-blue-800 transition-all duration-300 hover:scale-105 disabled:opacity-50"
             >
               {loading ? 'Actualizando...' : 'Actualizar Foto'}
             </button>
@@ -242,7 +242,7 @@ export default function Perfil() {
         </div>
 
         {/* Cambiar Contraseña */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 animate-scale-in transition-all duration-300 hover:shadow-xl" style={{animationDelay: '0.2s'}}>
           <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
             <span className="material-symbols-outlined text-blue-700 dark:text-blue-400">lock</span>
             Cambiar Contraseña

@@ -122,18 +122,18 @@ export default function Usuarios() {
           <span className="material-symbols-outlined text-4xl text-blue-900">group</span>
           Gestión de Usuarios
         </h1>
-        <p className="text-gray-600">Administra los accesos y pagos de los estudiantes</p>
+        <p className="text-gray-600 dark:text-gray-400">Administra los accesos y pagos de los clientes</p>
       </div>
 
       {/* Filtros */}
-      <div className="mb-6 bg-white rounded-xl shadow-md p-4">
+      <div className="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 animate-fade-in">
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => setFilter('all')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 ${
               filter === 'all'
-                ? 'bg-blue-900 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-blue-900 dark:bg-blue-700 text-white shadow-lg'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             <span className="material-symbols-outlined text-xl">list</span>
@@ -141,32 +141,21 @@ export default function Usuarios() {
           </button>
           <button
             onClick={() => setFilter('activo')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 ${
               filter === 'activo'
-                ? 'bg-green-700 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-green-700 dark:bg-green-600 text-white shadow-lg'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             <span className="material-symbols-outlined text-xl">check_circle</span>
             Activos ({users.filter(u => u.status_pago === 'activo').length})
           </button>
           <button
-            onClick={() => setFilter('validando')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
-              filter === 'validando'
-                ? 'bg-yellow-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            <span className="material-symbols-outlined text-xl">hourglass_empty</span>
-            Validando ({users.filter(u => u.status_pago === 'validando').length})
-          </button>
-          <button
             onClick={() => setFilter('pendiente')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 ${
               filter === 'pendiente'
-                ? 'bg-red-700 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-red-700 dark:bg-red-600 text-white shadow-lg'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             <span className="material-symbols-outlined text-xl">pending</span>
@@ -176,10 +165,10 @@ export default function Usuarios() {
       </div>
 
       {/* Tabla de Usuarios */}
-      <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden animate-scale-in">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-blue-900 text-white">
+            <thead className="bg-blue-900 dark:bg-blue-800 text-white">
               <tr>
                 <th className="px-6 py-4 text-left font-semibold">
                   <div className="flex items-center gap-2">
@@ -213,22 +202,16 @@ export default function Usuarios() {
                 </th>
                 <th className="px-6 py-4 text-left font-semibold">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined">calendar_today</span>
-                    Registro
-                  </div>
-                </th>
-                <th className="px-6 py-4 text-left font-semibold">
-                  <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined">settings</span>
                     Acciones
                   </div>
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <tr key={user._id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={user._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-300 animate-fade-in">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {user.foto_perfil ? (
@@ -254,16 +237,16 @@ export default function Usuarios() {
                       <div className="relative">
                         <button
                           onClick={() => setShowRoleDropdown(showRoleDropdown === user._id ? null : user._id)}
-                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold hover:opacity-80 transition-all ${
+                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold hover:opacity-80 transition-all duration-300 hover:scale-105 ${
                             user.rol === 'admin'
-                              ? 'bg-purple-100 text-purple-700'
-                              : 'bg-blue-100 text-blue-700'
+                              ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+                              : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                           }`}
                         >
                           <span className="material-symbols-outlined text-sm">
-                            {user.rol === 'admin' ? 'admin_panel_settings' : 'school'}
+                            {user.rol === 'admin' ? 'admin_panel_settings' : 'person'}
                           </span>
-                          {user.rol}
+                          {user.rol === 'admin' ? 'Admin' : 'Cliente'}
                           <span className="material-symbols-outlined text-sm">expand_more</span>
                         </button>
                         
@@ -277,11 +260,11 @@ export default function Usuarios() {
                               <span className="text-gray-800 dark:text-gray-200">Admin</span>
                             </button>
                             <button
-                              onClick={() => updateUserRole(user._id, 'estudiante')}
+                              onClick={() => updateUserRole(user._id, 'cliente')}
                               className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-sm border-t border-gray-200 dark:border-gray-700"
                             >
-                              <span className="material-symbols-outlined text-blue-600">school</span>
-                              <span className="text-gray-800 dark:text-gray-200">Estudiante</span>
+                              <span className="material-symbols-outlined text-blue-600">person</span>
+                              <span className="text-gray-800 dark:text-gray-200">Cliente</span>
                             </button>
                           </div>
                         )}
@@ -320,9 +303,6 @@ export default function Usuarios() {
                           <span className="text-xs text-gray-400">Sin materias</span>
                         )}
                       </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      {new Date(user.fecha_registro).toLocaleDateString('es-BO')}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
@@ -385,7 +365,7 @@ export default function Usuarios() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan="6" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                     <span className="material-symbols-outlined text-6xl text-gray-300 mb-4 block">
                       person_off
                     </span>

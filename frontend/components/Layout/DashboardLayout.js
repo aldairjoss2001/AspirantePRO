@@ -62,7 +62,6 @@ export default function DashboardLayout({ children, activeTab }) {
 
           <div className="flex items-center gap-2">
             <DarkModeToggle />
-            <NotificationBell />
             
             <div className="text-right hidden md:block">
               <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{user.nombre_completo}</p>
