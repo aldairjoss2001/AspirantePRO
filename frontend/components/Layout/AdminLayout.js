@@ -28,7 +28,7 @@ export default function AdminLayout({ children, activeTab }) {
     { name: 'Contenido', icon: 'folder', href: '/admin/contenido' },
     { name: 'Simulacros', icon: 'quiz', href: '/admin/simulacros' },
     { name: 'Reportes', icon: 'assessment', href: '/admin/reportes' },
-    { name: 'Configuración', icon: 'settings', href: '/admin/configuracion' },
+    { name: 'Perfil', icon: 'account_circle', href: '/admin/configuracion' },
   ];
 
   if (!user || !isAdmin) {

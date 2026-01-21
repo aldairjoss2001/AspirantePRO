@@ -191,18 +191,14 @@ exports.getAvailableSimulacros = async (req, res, next) => {
     const userId = req.user.id;
     const userMaterias = req.user.materias_acceso || [];
 
+    console.log('User materias:', userMaterias); // Debug log
+
     // Buscar simulacros publicados
     const now = new Date();
     
+    // Construir query con $and en nivel superior
     const query = {
-      publicado: true
-    };
-
-    // Agregar filtro de fecha de inicio y expiración
-    // Solo mostrar simulacros que:
-    // 1. No tienen fecha_inicio O ya pasó la fecha_inicio
-    // 2. No tienen fecha_expiracion O todavía no expiró
-    const dateFilters = {
+      publicado: true,
       $and: [
         {
           $or: [
@@ -220,8 +216,6 @@ exports.getAvailableSimulacros = async (req, res, next) => {
         }
       ]
     };
-    
-    Object.assign(query, dateFilters);
 
     // Filtrar por materias del usuario o "Todas las materias"
     // Si el usuario no tiene materias asignadas, mostrar contenido general
@@ -232,9 +226,13 @@ exports.getAvailableSimulacros = async (req, res, next) => {
       query.materia = 'Todas las materias';
     }
 
+    console.log('Query:', JSON.stringify(query, null, 2)); // Debug log
+
     const simulacros = await Simulacro.find(query)
       .select('titulo descripcion materia numero_preguntas duracion_minutos publicado')
       .sort('-createdAt');
+
+    console.log('Found simulacros:', simulacros.length); // Debug log
 
     // Obtener intentos previos del usuario para cada simulacro
     const simulacrosConIntentos = await Promise.all(
