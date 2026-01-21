@@ -147,8 +147,8 @@ export default function AdminDashboard() {
           <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mb-4">
             <span className="material-symbols-outlined text-green-700 text-3xl">quiz</span>
           </div>
-          <h3 className="text-xl font-bold text-gray-800 mb-2">Gestionar Quizzes</h3>
-          <p className="text-gray-600 text-sm">Crear y editar preguntas</p>
+          <h3 className="text-xl font-bold text-gray-800 mb-2">Gestionar Simulacros</h3>
+          <p className="text-gray-600 text-sm">Crear y editar simulacros</p>
         </a>
 
         <a

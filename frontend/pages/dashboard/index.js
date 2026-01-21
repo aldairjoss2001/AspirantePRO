@@ -65,35 +65,35 @@ export default function Dashboard() {
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-6 text-white">
           <div className="flex items-center justify-between mb-4">
-            <span className="material-symbols-outlined text-5xl opacity-80">auto_stories</span>
+            <span className="material-symbols-outlined text-5xl opacity-80">folder_open</span>
             <div className="text-right">
-              <p className="text-3xl font-bold">15+</p>
-              <p className="text-sm opacity-90">Libros</p>
+              <p className="text-3xl font-bold">100+</p>
+              <p className="text-sm opacity-90">Contenidos</p>
             </div>
           </div>
-          <p className="text-sm opacity-90">Disponibles en tu biblioteca</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-green-500 to-green-700 rounded-2xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <span className="material-symbols-outlined text-5xl opacity-80">task</span>
-            <div className="text-right">
-              <p className="text-3xl font-bold">50+</p>
-              <p className="text-sm opacity-90">Exámenes</p>
-            </div>
-          </div>
-          <p className="text-sm opacity-90">Pasados resueltos</p>
+          <p className="text-sm opacity-90">Libros, tips y exámenes</p>
         </div>
 
         <div className="bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl p-6 text-white">
           <div className="flex items-center justify-between mb-4">
             <span className="material-symbols-outlined text-5xl opacity-80">quiz</span>
             <div className="text-right">
-              <p className="text-3xl font-bold">500+</p>
-              <p className="text-sm opacity-90">Preguntas</p>
+              <p className="text-3xl font-bold">20+</p>
+              <p className="text-sm opacity-90">Simulacros</p>
             </div>
           </div>
-          <p className="text-sm opacity-90">En simulacros interactivos</p>
+          <p className="text-sm opacity-90">Exámenes de práctica</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-green-500 to-green-700 rounded-2xl p-6 text-white">
+          <div className="flex items-center justify-between mb-4">
+            <span className="material-symbols-outlined text-5xl opacity-80">school</span>
+            <div className="text-right">
+              <p className="text-3xl font-bold">{user?.materias_acceso?.length || 0}</p>
+              <p className="text-sm opacity-90">Materias</p>
+            </div>
+          </div>
+          <p className="text-sm opacity-90">Asignadas a ti</p>
         </div>
       </div>
 
@@ -143,28 +143,15 @@ export default function Dashboard() {
           
           <div className="space-y-3">
             <a
-              href="/dashboard/biblioteca"
+              href="/dashboard/material"
               className="flex items-center gap-4 p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
             >
               <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-2xl">auto_stories</span>
+                <span className="material-symbols-outlined text-white text-2xl">folder_open</span>
               </div>
               <div>
-                <p className="font-bold text-gray-800">Biblioteca</p>
-                <p className="text-sm text-gray-600">Consulta libros de gestión</p>
-              </div>
-            </a>
-
-            <a
-              href="/dashboard/examenes"
-              className="flex items-center gap-4 p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
-            >
-              <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-2xl">task</span>
-              </div>
-              <div>
-                <p className="font-bold text-gray-800">Banco de Exámenes</p>
-                <p className="text-sm text-gray-600">Exámenes pasados resueltos</p>
+                <p className="font-bold text-gray-800">Contenido</p>
+                <p className="text-sm text-gray-600">Libros, tips y exámenes</p>
               </div>
             </a>
 
@@ -176,8 +163,21 @@ export default function Dashboard() {
                 <span className="material-symbols-outlined text-white text-2xl">quiz</span>
               </div>
               <div>
-                <p className="font-bold text-gray-800">Simuladores Pro</p>
-                <p className="text-sm text-gray-600">Practica con cronómetro</p>
+                <p className="font-bold text-gray-800">Simulacros</p>
+                <p className="text-sm text-gray-600">Exámenes de práctica</p>
+              </div>
+            </a>
+
+            <a
+              href="/dashboard/perfil"
+              className="flex items-center gap-4 p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
+            >
+              <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
+                <span className="material-symbols-outlined text-white text-2xl">account_circle</span>
+              </div>
+              <div>
+                <p className="font-bold text-gray-800">Mi Perfil</p>
+                <p className="text-sm text-gray-600">Ver información personal</p>
               </div>
             </a>
           </div>
