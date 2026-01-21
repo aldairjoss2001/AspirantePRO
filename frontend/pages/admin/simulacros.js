@@ -8,6 +8,7 @@ export default function Simulacros() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showQuestionModal, setShowQuestionModal] = useState(false);
+  const [showCreateQuestionModal, setShowCreateQuestionModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [materiasDisponibles, setMateriasDisponibles] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
@@ -23,6 +24,16 @@ export default function Simulacros() {
     publicado: false,
     fecha_inicio: '',
     fecha_expiracion: ''
+  });
+
+  const [questionFormData, setQuestionFormData] = useState({
+    pregunta: '',
+    opciones: ['', '', '', ''],
+    respuesta_correcta: 0,
+    explicacion: '',
+    materia: '',
+    dificultad: 'media',
+    publicado: true
   });
 
   useEffect(() => {
@@ -186,6 +197,30 @@ export default function Simulacros() {
     return filtered;
   };
 
+  const handleCreateQuestion = async (e) => {
+    e.preventDefault();
+    
+    try {
+      await api.post('/quizzes', questionFormData);
+      setShowCreateQuestionModal(false);
+      fetchQuizzes();
+      alert('Pregunta creada exitosamente');
+    } catch (error) {
+      console.error('Error al crear pregunta:', error);
+      alert(error.response?.data?.message || 'Error al crear la pregunta');
+    }
+  };
+
+  const handleQuestionFormChange = (field, value) => {
+    setQuestionFormData({ ...questionFormData, [field]: value });
+  };
+
+  const handleOptionChange = (index, value) => {
+    const newOpciones = [...questionFormData.opciones];
+    newOpciones[index] = value;
+    setQuestionFormData({ ...questionFormData, opciones: newOpciones });
+  };
+
   if (loading) {
     return (
       <AdminLayout>
@@ -211,13 +246,24 @@ export default function Simulacros() {
             </p>
           </div>
           <div className="flex gap-3">
-            <a
-              href="/admin/quizzes"
+            <button
+              onClick={() => {
+                setQuestionFormData({
+                  pregunta: '',
+                  opciones: ['', '', '', ''],
+                  respuesta_correcta: 0,
+                  explicacion: '',
+                  materia: '',
+                  dificultad: 'media',
+                  publicado: true
+                });
+                setShowCreateQuestionModal(true);
+              }}
               className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-all flex items-center gap-2 hover:scale-105"
             >
               <span className="material-symbols-outlined">add_circle</span>
-              Gestionar Preguntas
-            </a>
+              Crear Pregunta
+            </button>
             <button
               onClick={() => {
                 resetForm();
@@ -559,6 +605,151 @@ export default function Simulacros() {
                       setShowModal(false);
                       resetForm();
                     }}
+                    className="flex-1 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Question Modal */}
+      {showCreateQuestionModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-scale-in">
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Crear Nueva Pregunta
+              </h2>
+              
+              <form onSubmit={handleCreateQuestion} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Pregunta *
+                  </label>
+                  <textarea
+                    value={questionFormData.pregunta}
+                    onChange={(e) => handleQuestionFormChange('pregunta', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    rows="3"
+                    placeholder="Escribe la pregunta..."
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Opciones *
+                  </label>
+                  {questionFormData.opciones.map((opcion, index) => (
+                    <input
+                      key={index}
+                      type="text"
+                      value={opcion}
+                      onChange={(e) => handleOptionChange(index, e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white mb-2"
+                      placeholder={`Opción ${index + 1}`}
+                      required
+                    />
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Respuesta Correcta *
+                    </label>
+                    <select
+                      value={questionFormData.respuesta_correcta}
+                      onChange={(e) => handleQuestionFormChange('respuesta_correcta', parseInt(e.target.value))}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    >
+                      <option value={0}>Opción 1</option>
+                      <option value={1}>Opción 2</option>
+                      <option value={2}>Opción 3</option>
+                      <option value={3}>Opción 4</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Materia *
+                    </label>
+                    <select
+                      value={questionFormData.materia}
+                      onChange={(e) => handleQuestionFormChange('materia', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    >
+                      <option value="">Seleccionar materia</option>
+                      {materiasDisponibles.map((materia) => (
+                        <option key={materia} value={materia}>
+                          {materia}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Dificultad *
+                    </label>
+                    <select
+                      value={questionFormData.dificultad}
+                      onChange={(e) => handleQuestionFormChange('dificultad', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    >
+                      <option value="fácil">Fácil</option>
+                      <option value="media">Media</option>
+                      <option value="difícil">Difícil</option>
+                    </select>
+                  </div>
+
+                  <div className="flex items-center">
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={questionFormData.publicado}
+                        onChange={(e) => handleQuestionFormChange('publicado', e.target.checked)}
+                        className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Publicar pregunta
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Explicación
+                  </label>
+                  <textarea
+                    value={questionFormData.explicacion}
+                    onChange={(e) => handleQuestionFormChange('explicacion', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    rows="3"
+                    placeholder="Explicación de la respuesta correcta..."
+                  />
+                </div>
+
+                <div className="flex gap-3 mt-6">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-all"
+                  >
+                    Crear Pregunta
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowCreateQuestionModal(false)}
                     className="flex-1 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
                   >
                     Cancelar

@@ -110,32 +110,6 @@ export default function Login() {
                   <p className="text-blue-200 text-sm">Contenido especializado según tu carrera de interés</p>
                 </div>
               </div>
-
-              <div className="flex items-start gap-4 bg-white/10 backdrop-blur-sm p-4 rounded-xl hover:bg-white/20 transition-all">
-                <div className="bg-yellow-400 p-3 rounded-lg flex-shrink-0">
-                  <span className="material-symbols-outlined text-blue-900 text-2xl">support_agent</span>
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">Soporte 24/7</h3>
-                  <p className="text-blue-200 text-sm">Ayuda inmediata vía WhatsApp cuando lo necesites</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400">500+</div>
-                <div className="text-sm text-blue-200">Estudiantes</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400">15</div>
-                <div className="text-sm text-blue-200">Especialidades</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400">95%</div>
-                <div className="text-sm text-blue-200">Satisfacción</div>
-              </div>
             </div>
           </div>
 
