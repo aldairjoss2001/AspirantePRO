@@ -42,9 +42,17 @@ export default function Simulacros() {
     try {
       setLoading(true);
       const response = await api.get('/simulacros');
-      setSimulacros(response.data);
+      // Ensure we always set an array
+      if (Array.isArray(response.data)) {
+        setSimulacros(response.data);
+      } else if (response.data && Array.isArray(response.data.simulacros)) {
+        setSimulacros(response.data.simulacros);
+      } else {
+        setSimulacros([]);
+      }
     } catch (error) {
       console.error('Error al cargar simulacros:', error);
+      setSimulacros([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -53,9 +61,17 @@ export default function Simulacros() {
   const fetchHistory = async () => {
     try {
       const response = await api.get('/simulacros/history');
-      setHistory(response.data);
+      // Ensure we always set an array
+      if (Array.isArray(response.data)) {
+        setHistory(response.data);
+      } else if (response.data && Array.isArray(response.data.history)) {
+        setHistory(response.data.history);
+      } else {
+        setHistory([]);
+      }
     } catch (error) {
       console.error('Error al cargar historial:', error);
+      setHistory([]); // Set empty array on error
     }
   };
 
