@@ -23,7 +23,7 @@ export default function DashboardLayout({ children, activeTab }) {
 
   const menuItems = [
     { name: 'Dashboard', icon: 'dashboard', href: '/dashboard', requiresAccess: false },
-    { name: 'Material', icon: 'folder_open', href: '/dashboard/material', requiresAccess: true },
+    { name: 'Contenido', icon: 'folder_open', href: '/dashboard/material', requiresAccess: true },
     { name: 'Simulacros', icon: 'quiz', href: '/dashboard/simuladores', requiresAccess: true },
     { name: 'Perfil', icon: 'account_circle', href: '/dashboard/perfil', requiresAccess: false },
   ];
