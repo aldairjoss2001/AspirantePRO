@@ -228,6 +228,16 @@ exports.getAvailableSimulacros = async (req, res, next) => {
 
     console.log('Query:', JSON.stringify(query, null, 2)); // Debug log
 
+    // Debug: Check total simulacros in database
+    const totalSimulacros = await Simulacro.countDocuments();
+    const publicadosSimulacros = await Simulacro.countDocuments({ publicado: true });
+    console.log('Total simulacros in DB:', totalSimulacros);
+    console.log('Published simulacros in DB:', publicadosSimulacros);
+    
+    // Debug: Show all published simulacros with their materias
+    const allPublished = await Simulacro.find({ publicado: true }).select('titulo materia publicado fecha_inicio fecha_expiracion');
+    console.log('All published simulacros:', JSON.stringify(allPublished, null, 2));
+
     const simulacros = await Simulacro.find(query)
       .select('titulo descripcion materia numero_preguntas duracion_minutos publicado')
       .sort('-createdAt');
