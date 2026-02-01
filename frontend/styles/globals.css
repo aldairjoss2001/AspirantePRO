@@ -1,0 +1,540 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #1e3a8a;
+  --secondary: #3b82f6;
+  --accent: #fbbf24;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Degradado de texto personalizado */
+.text-gradient {
+  background: linear-gradient(to right, #1e3a8a, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animación de flotado para elementos visuales */
+.float-animation {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Efecto de brillo en botones */
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(45deg);
+  transition: 0.6s;
+  opacity: 0;
+}
+
+.shine-effect:hover::after {
+  left: 120%;
+  opacity: 1;
+}
+
+/* Glassmorphism para tarjetas */
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Estilo para el Navbar al hacer scroll */
+.nav-scrolled {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  padding: 0.5rem 0;
+}
+
+/* ========== ANIMACIONES Y TRANSICIONES ========== */
+
+/* Animación de entrada suave (fade in + slide up) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Animación de entrada desde la izquierda */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s ease-out forwards;
+}
+
+/* Animación de entrada desde la derecha */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+/* Animación de escala (scale in) */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+/* Animación de pulso suave */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+}
+
+.pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Animación de carga (skeleton loader) */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton-loader {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+.dark .skeleton-loader {
+  background: linear-gradient(
+    90deg,
+    #374151 25%,
+    #4b5563 50%,
+    #374151 75%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Animación de entrada para modales */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-backdrop {
+  animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+.modal-content {
+  animation: modalSlideIn 0.4s ease-out forwards;
+}
+
+/* Animación de rebote para notificaciones */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bounce-in {
+  animation: bounceIn 0.6s ease-out forwards;
+}
+
+/* Animación de rotación para loaders */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-slow {
+  animation: spin-slow 1.5s linear infinite;
+}
+
+/* Transiciones suaves para elementos interactivos */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effects con animaciones */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Animación para stagger (elementos secuenciales) */
+.stagger-item {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0.1s; }
+.stagger-item:nth-child(2) { animation-delay: 0.2s; }
+.stagger-item:nth-child(3) { animation-delay: 0.3s; }
+.stagger-item:nth-child(4) { animation-delay: 0.4s; }
+.stagger-item:nth-child(5) { animation-delay: 0.5s; }
+.stagger-item:nth-child(6) { animation-delay: 0.6s; }
+
+/* Loading spinner personalizado */
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  border: 3px solid rgba(30, 58, 138, 0.1);
+  border-top: 3px solid #1e3a8a;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spinner 0.8s linear infinite;
+}
+
+.dark .spinner {
+  border: 3px solid rgba(59, 130, 246, 0.1);
+  border-top: 3px solid #3b82f6;
+}
+
+/* Progress bar animation */
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+}
+
+.progress-bar {
+  animation: progress 1.5s ease-out forwards;
+}
+
+/* Página de transición entre rutas */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.page-transition-exit {
+  opacity: 1;
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* ========== DARK MODE IMPROVEMENTS ========== */
+
+/* Asegurar que todos los textos sean legibles en modo oscuro */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #111827;
+  color: #e5e7eb;
+}
+
+/* Textos principales en modo oscuro */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: #f9fafb !important;
+}
+
+.dark p,
+.dark span:not(.material-symbols-outlined),
+.dark label,
+.dark a {
+  color: #d1d5db !important;
+}
+
+/* Inputs y formularios en modo oscuro */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+  border-color: #374151 !important;
+}
+
+/* Fix for white inputs in dark mode - text should be black */
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="number"],
+.dark input[type="date"],
+.dark input[type="datetime-local"],
+.dark input[type="time"],
+.dark input[type="search"],
+.dark input[type="url"],
+.dark input[type="tel"],
+.dark textarea,
+.dark select {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: #d1d5db !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #6b7280 !important;
+}
+
+/* Tablas en modo oscuro */
+.dark table {
+  color: #e5e7eb;
+}
+
+.dark th {
+  background-color: #1f2937;
+  color: #f9fafb !important;
+}
+
+.dark td {
+  color: #d1d5db !important;
+  border-color: #374151;
+}
+
+/* Modales en modo oscuro */
+.dark .modal-content,
+.dark [class*="bg-white"] {
+  background-color: #1f2937 !important;
+}
+
+/* Iconos Material Symbols en modo oscuro */
+.dark .material-symbols-outlined {
+  /* Los iconos mantendrán su color específico */
+}
+
+/* Botones y enlaces hover en modo oscuro */
+.dark button:hover,
+.dark a:hover {
+  opacity: 0.9;
+}
+
+/* Badges y etiquetas en modo oscuro - mantener colores originales */
+.dark .bg-blue-100 { background-color: #1e3a8a !important; }
+.dark .text-blue-700 { color: #93c5fd !important; }
+.dark .bg-green-100 { background-color: #065f46 !important; }
+.dark .text-green-700 { color: #86efac !important; }
+.dark .bg-yellow-100 { background-color: #78350f !important; }
+.dark .text-yellow-700 { color: #fde047 !important; }
+.dark .bg-red-100 { background-color: #7f1d1d !important; }
+.dark .text-red-700 { color: #fca5a5 !important; }
+.dark .bg-purple-100 { background-color: #581c87 !important; }
+.dark .text-purple-700 { color: #d8b4fe !important; }
+
+/* Cards y contenedores en modo oscuro */
+.dark .shadow-md,
+.dark .shadow-lg,
+.dark .shadow-xl {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== MOBILE RESPONSIVE IMPROVEMENTS ========== */
+
+/* Mejor espaciado en móviles */
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+  
+  /* Padding reducido en móviles */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Botones más grandes para tocar */
+  button,
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Modales ocupan más espacio en móviles */
+  .modal-content {
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  /* Grids a una columna en móviles */
+  .grid-responsive {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Tablas scroll horizontal en móviles */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Tablets */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) {
+  .hover-lift:hover {
+    transform: translateY(0);
+  }
+  
+  .hover-lift:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* WhatsApp button siempre visible */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+@media (max-width: 640px) {
+  .whatsapp-float {
+    bottom: 15px;
+    right: 15px;
+  }
+}

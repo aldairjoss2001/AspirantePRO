@@ -100,18 +100,24 @@
             <span class="text-2xl font-bold text-blue-900 tracking-tighter">Aspirante<span class="text-blue-500">Pro</span></span>
         </div>
         
-        <div class="hidden lg:flex items-center gap-8 font-medium text-blue-900/80">
+        <div class="hidden lg:flex items-center gap-6 font-medium text-blue-900/80">
             <a href="#inicio" class="hover:text-blue-600 transition-colors">Inicio</a>
             <a href="#recursos" class="hover:text-blue-600 transition-colors">Material de Estudio</a>
             <a href="#beneficios" class="hover:text-blue-700 transition-colors">Beneficios</a>
-            <a href="/frontend/pages/auth/login.js" class="flex items-center gap-2 bg-blue-700 text-white px-8 py-3 rounded-2xl shadow-xl hover:bg-blue-800 transition-all shine-effect">
-                <span class="material-symbols-outlined">login</span> Iniciar Sesión
+            <a href="/auth/login" class="flex items-center gap-2 px-6 py-3 bg-white border-2 border-blue-700 text-blue-700 rounded-2xl font-bold hover:bg-blue-50 transition-all">
+                <span class="material-symbols-outlined">login</span>
+                Iniciar Sesión
             </a>
         </div>
 
-        <button class="lg:hidden text-blue-900">
-            <span class="material-symbols-outlined text-4xl">menu</span>
-        </button>
+        <div class="flex lg:hidden items-center gap-3">
+            <a href="/auth/login" class="p-2 bg-blue-700 text-white rounded-xl">
+                <span class="material-symbols-outlined text-2xl">login</span>
+            </a>
+            <button class="text-blue-900">
+                <span class="material-symbols-outlined text-4xl">menu</span>
+            </button>
+        </div>
     </nav>
 
     <!-- HERO SECTION -->
@@ -130,10 +136,10 @@
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a href="/frontend/pages/auth/register.js" class="px-10 py-5 bg-blue-700 text-white rounded-2xl font-bold text-lg shadow-2xl hover:scale-105 transition-transform flex items-center justify-center gap-2 shine-effect">
-                        <span class="material-symbols-outlined">rocket_launch</span> Comenzar ahora
+                        <span class="material-symbols-outlined">rocket_launch</span> Crear Cuenta Gratis
                     </a>
-                    <a href="#recursos" class="px-10 py-5 bg-white border-2 border-blue-100 text-blue-700 rounded-2xl font-bold text-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
-                         Ver contenido
+                    <a href="/auth/login" class="px-10 py-5 bg-white border-2 border-blue-100 text-blue-700 rounded-2xl font-bold text-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">login</span> Iniciar Sesión
                     </a>
                 </div>
             </div>
@@ -203,27 +209,26 @@
     </section>
 
     <!-- CALL TO ACTION SECTION -->
-    <section class="py-24 bg-blue-950 text-white overflow-hidden relative">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <div class="bg-white/5 backdrop-blur-xl border border-white/10 p-12 rounded-[3rem] relative overflow-hidden">
-                <!-- Decoración -->
-                <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-500 rounded-full blur-[100px] opacity-20"></div>
-                
-                <div data-aos="fade-up" class="relative z-10">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-6">¿Listo para alcanzar tu meta?</h2>
-                    <p class="text-blue-100/80 text-lg mb-8 max-w-2xl mx-auto">
-                        Únete a cientos de aspirantes que ya están preparándose para su ingreso a la ESFM. Regístrate ahora y accede a todo el material de estudio.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <a href="/frontend/pages/auth/register.js" class="px-10 py-5 bg-yellow-400 text-blue-950 rounded-2xl font-bold text-xl shadow-2xl hover:scale-105 transition-transform flex items-center justify-center gap-2 shine-effect">
-                            <span class="material-symbols-outlined">person_add</span> Crear Cuenta Gratis
-                        </a>
-                        <a href="/frontend/pages/auth/login.js" class="px-10 py-5 bg-white/10 border-2 border-white/20 text-white rounded-2xl font-bold text-xl hover:bg-white/20 transition-colors flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">login</span> Iniciar Sesión
-                        </a>
-                    </div>
-                    <p class="mt-6 text-sm text-blue-200">Acceso inmediato al registrarte. Sin costos ocultos.</p>
+    <section id="cta" class="py-24 bg-blue-950 text-white overflow-hidden relative">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <div data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">¿Listo para alcanzar tu meta?</h2>
+                <p class="text-blue-100/80 text-xl mb-12">
+                    Únete a cientos de aspirantes que ya están preparándose para ingresar a la ESFM. Regístrate gratis y comienza tu camino hacia el éxito.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <a href="/frontend/pages/auth/register.js" class="px-12 py-5 bg-yellow-400 text-blue-950 rounded-2xl font-bold text-xl shadow-2xl hover:bg-yellow-300 transition-all shine-effect flex items-center gap-3">
+                        <span class="material-symbols-outlined text-2xl">person_add</span>
+                        Crear Cuenta Gratis
+                    </a>
+                    <a href="/auth/login" class="px-12 py-5 bg-white/10 backdrop-blur-xl border-2 border-white/30 text-white rounded-2xl font-bold text-xl hover:bg-white/20 transition-all flex items-center gap-3">
+                        <span class="material-symbols-outlined text-2xl">login</span>
+                        Iniciar Sesión
+                    </a>
                 </div>
+                <p class="text-blue-200/60 text-sm mt-8">
+                    Acceso inmediato al registrarte. Sin costos ocultos.
+                </p>
             </div>
         </div>
     </section>
